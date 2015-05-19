@@ -178,6 +178,11 @@ nova keypair-add default --pub-key ~/.ssh/id_rsa.pub
 ```
 
 ```
+IMG_SRC=$(glance image-list | egrep 'uec ' | awk '{print $2}')
+
+ironic node-update $NODE_UUID add instance_info/root_gb=11
+ironic node-update $NODE_UUID add instance_info/image_source=$IMG_SRC
+
 net_id=$(neutron net-list | egrep "sharednet1"'[^-]' | awk '{ print $2 }')
 nova boot --flavor my-baremetal-flavor --nic net-id=$net_id --image $image --key-name default testing
 ```
