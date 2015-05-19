@@ -2,6 +2,18 @@ Ironic
 ======
 
 # Setup the stack
+```
+vagrant up
+```
+
+Probably run into issues with apt on guest, login to guest and run:
+```
+sudo apt-get update
+```
+
+Rerun vagrant: `vagrant provision`
+
+
 On guest:
 ```
 sudo su - stack
