@@ -1,3 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'berkshelf', '~> 3.1.5'
+gem 'test-kitchen'
+gem 'kitchen-vagrant'
+gem 'berkshelf'

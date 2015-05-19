@@ -1,3 +1,4 @@
+include_recipe 'apt::default'
 include_recipe 'git::default'
 
 git '/var/tmp/devstack' do

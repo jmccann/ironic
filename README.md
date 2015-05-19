@@ -3,19 +3,8 @@ Ironic
 
 # Setup the stack
 ```
-vagrant up
-```
-
-Probably run into issues with apt on guest, login to guest and run:
-```
-sudo apt-get update
-```
-
-Rerun vagrant: `vagrant provision`
-
-
-On guest:
-```
+kitchen conv
+kitchen login
 sudo su - stack
 cd devstack
 ./stack.sh
@@ -29,7 +18,7 @@ When it is done you can hit the dashboard @ http://localhost:8080/ admin:passwor
 
 ## Stuff for communicating with virtualbox on host system
 ```
-sudo apt-get install python-ZSI
+sudo apt-get install python-ZSI -y
 sudo pip install pyremotevbox
 ```
 

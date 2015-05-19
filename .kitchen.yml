@@ -1,0 +1,22 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: ubuntu-14.04
+    driver:
+      customize:
+        cpus: 2
+        memory: 4096
+      network:
+        - ["forwarded_port", {guest: 443, host: 9443, auto_correct: true}]
+        - ["forwarded_port", {guest: 80, host: 8080, auto_correct: true}]
+        - ["private_network", {type: 'dhcp', virtualbox__intnet: true, auto_config: false}]
+
+suites:
+  - name: default
+    run_list:
+      - recipe[ironic::default]
