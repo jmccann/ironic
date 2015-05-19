@@ -23,12 +23,31 @@ cd devstack
 
 Now wait about 30 min.
 
+When it is done you can hit the dashboard @ http://localhost:8080/ admin:password
+
 # Install some additional dependencies
 
 ## Stuff for communicating with virtualbox on host system
 ```
 sudo apt-get install python-ZSI
 sudo pip install pyremotevbox
+```
+
+## Start VBox Webserver thing on host
+Blank out password:
+```
+VBoxManage setproperty websrvauthlibrary null
+```
+
+Start it up in foreground
+MacOSX:
+```
+/Applications/VirtualBox.app/Contents/MacOS/vboxwebsrv
+```
+
+Windows:
+```
+C:\Program Files\Oracle\VirtualBox\VBoxWebSrv.exe
 ```
 
 # Special OS configs for vbox baremetal
@@ -162,3 +181,11 @@ nova keypair-add default --pub-key ~/.ssh/id_rsa.pub
 net_id=$(neutron net-list | egrep "sharednet1"'[^-]' | awk '{ print $2 }')
 nova boot --flavor my-baremetal-flavor --nic net-id=$net_id --image $image --key-name default testing
 ```
+
+# Resources
+
+* http://docs.openstack.org/developer/ironic/drivers/vbox.html - Using Vbox to simulate baremetal nodes for ironic.  This assumes a base undertanding of how a lot of stuff works already.
+* http://docs.openstack.org/developer/ironic/dev/dev-quickstart.html#deploying-ironic-with-devstack - Where I started.  Has a good walkthrough of EASILY setting it up and working with 3 kvm 'baremetal' hosts.
+* http://docs.openstack.org/developer/ironic/deploy/install-guide.html - Had additional notes for creating baremetal nodes in ironic ... details missing in other guides above.
+* https://www.rdoproject.org/Networking_in_too_much_detail - Crazy in depth info on how networking works in Openstack
+* https://software.intel.com/en-us/articles/physical-server-provisioning-with-openstack - More misc references
