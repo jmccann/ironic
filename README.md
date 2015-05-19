@@ -75,7 +75,7 @@ sed -i -r -e 's/^# network_vlan_ranges =.*/network_vlan_ranges = physnet1/g' /et
 sed -i -r -e 's/^# enable_security_group =.*/enable_security_group = True/g' /etc/neutron/plugins/ml2/ml2_conf.ini
 ```
 
-Add `bridge_mappings = physnet1:br-eth1` to `[ovs]` section also.
+Add `bridge_mappings = physnet1:br-eth1` to `[ovs]` section in `/etc/neutron/plugins/ml2/ml2_conf.ini`.
 
 Add `bridge_mappings = physnet1:br-eth1` to `[ovs]` section in `/opt/stack/neutron/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini` also.
 
