@@ -14,9 +14,7 @@ Now wait about 30 min.
 
 When it is done you can hit the dashboard @ http://localhost:8080/ admin:password
 
-# Install some additional dependencies
-
-## Start VBox Webserver thing on host
+# Start VBox Webserver thing on host
 Blank out password:
 ```
 VBoxManage setproperty websrvauthlibrary null
