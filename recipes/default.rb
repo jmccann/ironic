@@ -17,6 +17,11 @@ execute '/var/tmp/devstack/tools/create-stack-user.sh' do
   not_if 'egrep "^[ \t]*stack:" /etc/passwd'
 end
 
+execute "ssh-keygen -N '' -f /opt/stack/.ssh/id_rsa" do
+  creates '/opt/stack/.ssh/id_rsa'
+  user 'stack'
+end
+
 execute 'git clone https://github.com/openstack-dev/devstack.git devstack' do
   cwd '/opt/stack'
   user 'stack'
@@ -24,6 +29,9 @@ execute 'git clone https://github.com/openstack-dev/devstack.git devstack' do
 end
 
 cookbook_file '/opt/stack/devstack/local.conf'
+cookbook_file '/opt/stack/finalize.sh' do
+  mode 0750
+end
 
 # Want to stack automatically but sudo tty issues?  But another cookbook does it fine ...
 # execute 'unstack.sh' do
