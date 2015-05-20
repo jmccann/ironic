@@ -17,7 +17,6 @@ sudo ovs-vsctl add-br br-eth1
 sudo ovs-vsctl add-port br-eth1 eth1
 
 # Restart Open vSwitch agent (#9 q-agt)
-# script /dev/null
 screen -S stack -X at 9 stuff $'\003' # Ctrl-C
 screen -S stack -X at 9 stuff $'\033[A' # Up arrow (for prev command)
 screen -S stack -X at 9 stuff $'\015' # Enter
