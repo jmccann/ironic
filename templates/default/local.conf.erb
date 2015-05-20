@@ -39,7 +39,7 @@ disable_service heat h-api h-api-cfn h-api-cw h-eng
 # Disable Cinder
 # disable_service cinder c-sch c-api c-vol
 
-IRONIC_ENABLED_DRIVERS=fake,pxe_ssh,pxe_ipmitool,pxe_vbox,agent_vbox
+IRONIC_ENABLED_DRIVERS=fake,pxe_ssh,pxe_ipmitool,pxe_vbox,agent_vbox,agent_ssh,agent_ipmitool
 IRONIC_BAREMETAL_BASIC_OPS=True
 
 # # Create 3 virtual machines to pose as Ironic's baremetal nodes.
@@ -67,3 +67,21 @@ FIXED_NETWORK_SIZE=256
 LOGFILE=$HOME/devstack.log
 SCREEN_LOGDIR=$HOME/logs
 IRONIC_VM_LOG_DIR=$HOME/ironic-bm-logs
+
+<% if node['ironic']['agent'] == 'agent_vbox' %>
+# Agent driver requires swift with tempurls
+# Enable swift services
+enable_service s-proxy
+enable_service s-object
+enable_service s-container
+enable_service s-account
+
+# Enable tempurls and set credentials
+SWIFT_HASH=password
+SWIFT_TEMPURL_KEY=password
+SWIFT_ENABLE_TEMPURLS=True
+
+# To build your own IPA ramdisk from source, set this to True
+IRONIC_BUILD_DEPLOY_RAMDISK=False
+IRONIC_DEPLOY_DRIVER=agent_vbox
+<% end %>

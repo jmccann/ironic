@@ -28,8 +28,8 @@ execute 'git clone https://github.com/openstack-dev/devstack.git devstack' do
   not_if '[ -d devstack ]'
 end
 
-cookbook_file '/opt/stack/devstack/local.conf'
-cookbook_file '/opt/stack/finalize.sh' do
+template '/opt/stack/devstack/local.conf'
+template '/opt/stack/finalize.sh' do
   mode 0750
 end
 
