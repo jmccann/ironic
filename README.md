@@ -41,19 +41,6 @@ C:\Program Files\Oracle\VirtualBox\VBoxWebSrv.exe
 
 # Special OS configs for vbox baremetal
 
-## Configure ironic with vbox driver
-```
-sed -i -e 's/enabled_drivers = fake,pxe_ssh,pxe_ipmitool/enabled_drivers = fake,pxe_ssh,pxe_ipmitool,pxe_vbox/g' /etc/ironic/ironic.conf
-```
-
-Restart ir-cond:
-```
-script /dev/null
-screen -r
-```
-
-Goto `ir-cond`, do a `Ctrl+C` to end Ironic Conductor.  Then hit the up arrow and Enter to run the last command which starts it again.  `Ctrl+d a` to detach from screen.
-
 ## Configure network
 ```
 sed -i -r -e 's/^type_drivers = .*/type_drivers = flat/g' /etc/neutron/plugins/ml2/ml2_conf.ini

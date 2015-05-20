@@ -11,8 +11,7 @@ end
 # package 'vim-minimal' do
 #   action :upgrade
 # end
-# package 'python-ZSI'
-# execute 'pip install pyremotevbox'
+include_recipe 'ironic::vbox_driver_prereq'
 
 execute '/var/tmp/devstack/tools/create-stack-user.sh' do
   not_if 'egrep "^[ \t]*stack:" /etc/passwd'
