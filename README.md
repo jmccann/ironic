@@ -16,12 +16,6 @@ When it is done you can hit the dashboard @ http://localhost:8080/ admin:passwor
 
 # Install some additional dependencies
 
-## Stuff for communicating with virtualbox on host system
-```
-sudo apt-get install python-ZSI -y
-sudo pip install pyremotevbox
-```
-
 ## Start VBox Webserver thing on host
 Blank out password:
 ```
