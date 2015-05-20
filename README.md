@@ -65,6 +65,8 @@ net_id=$(neutron net-list | egrep "sharednet1"'[^-]' | awk '{ print $2 }')
 nova boot --flavor my-baremetal-flavor --nic net-id=$net_id --image $image --key-name default testing
 ```
 
+Can take up to like 10 sec before VM will auto power-on.  Be patient.
+
 # Resources
 
 * http://docs.openstack.org/developer/ironic/drivers/vbox.html - Using Vbox to simulate baremetal nodes for ironic.  This assumes a base undertanding of how a lot of stuff works already.
