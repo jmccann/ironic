@@ -41,9 +41,12 @@ sudo ifconfig eth1 up
 sudo ifconfig br-eth1 192.168.50.1 netmask 255.255.255.0 up
 
 # Create a new node in ironic
-IMG_SRC=$(glance image-list | egrep 'uec ' | awk '{print $2}')
-IMG_KERN=$(glance image-list | egrep 'uec-kernel ' | awk '{print $2}')
-IMG_RAM=$(glance image-list | egrep 'uec-ramdisk ' | awk '{print $2}')
+IMG_SRC=$(glance image-list | egrep 'uec ' | awk '{print $2}') # For pxe_vbox
+# IMG_SRC=$(glance image-list | egrep -- '-disk ' | awk '{print $2}') # For agent_vbox
+
+IMG_KERN=$(glance image-list | egrep 'ir-deploy-pxe_ssh.kernel ' | awk '{print $2}') # ir-deploy
+IMG_RAM=$(glance image-list | egrep 'ir-deploy-pxe_ssh.initramfs ' | awk '{print $2}') # ir-deploy
+
 MAC_ADDRESS='08:00:27:6E:DF:70' # Set from baremetal_vm.sh
 
 RAM_MB=2048
@@ -51,6 +54,7 @@ CPU=1
 DISK_GB=11
 ARCH=x86_64
 
+# NODE_UUID=$(ironic node-create -n my-baremetal -d agent_vbox -i virtualbox_host='10.0.2.2' -i virtualbox_vmname='baremetal' | grep uuid | awk '{print $4}' | head -1)
 NODE_UUID=$(ironic node-create -n my-baremetal -d pxe_vbox -i virtualbox_host='10.0.2.2' -i virtualbox_vmname='baremetal' | grep uuid | awk '{print $4}' | head -1)
 
 ironic node-update $NODE_UUID add \
@@ -71,8 +75,6 @@ RAM_MB=2048
 CPU=1
 DISK_GB=11
 ARCH=x86_64
-IMG_KERN=$(glance image-list | egrep 'uec-kernel ' | awk '{print $2}')
-IMG_RAM=$(glance image-list | egrep 'uec-ramdisk ' | awk '{print $2}')
 
 nova flavor-create my-baremetal-flavor auto $RAM_MB $DISK_GB $CPU
 nova flavor-key my-baremetal-flavor set cpu_arch=$ARCH
