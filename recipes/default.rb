@@ -30,6 +30,7 @@ end
 
 template '/opt/stack/devstack/local.conf'
 template '/opt/stack/finalize.sh' do
+  user 'stack'
   mode 0750
 end
 
