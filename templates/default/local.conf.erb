@@ -35,7 +35,7 @@ enable_service neutron
 disable_service heat h-api h-api-cfn h-api-cw h-eng
 
 # Disable Cinder
-# disable_service cinder c-sch c-api c-vol
+disable_service cinder c-sch c-api c-vol
 
 IRONIC_ENABLED_DRIVERS=fake,pxe_ssh,pxe_ipmitool,pxe_vbox,agent_vbox,agent_ssh,agent_ipmitool
 IRONIC_BAREMETAL_BASIC_OPS=True
