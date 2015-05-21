@@ -40,9 +40,19 @@ end
 #   command '/opt/stack/devstack/unstack.sh'
 #   user 'stack'
 # end
-#
-# execute 'stack.sh' do
-#   cwd '/opt/stack/devstack'
-#   command '/opt/stack/devstack/stack.sh'
-#   user 'stack'
-# end
+
+execute 'stack.sh' do
+  cwd '/opt/stack/devstack'
+  command '/opt/stack/devstack/stack.sh && touch /opt/stack/devstack/.stacked'
+  user 'stack'
+  environment 'HOME' => '/opt/stack'
+  timeout 7200
+  creates '/opt/stack/devstack/.stacked'
+end
+
+execute 'finalize.sh' do
+  cwd '/opt/stack'
+  user 'stack'
+  command '/opt/stack/finalize.sh && touch /opt/stack/.finalized'
+  creates '/opt/stack/.finalized'
+end

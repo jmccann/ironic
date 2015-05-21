@@ -1,6 +1,4 @@
 [[local|localrc]]
-# HOST_IP=192.168.50.4
-# HOST_IP=127.0.0.1
 
 # Credentials
 ADMIN_PASSWORD=password
@@ -64,9 +62,9 @@ FIXED_RANGE=10.1.0.0/24
 FIXED_NETWORK_SIZE=256
 
 # Log all output to files
-LOGFILE=$HOME/devstack.log
-SCREEN_LOGDIR=$HOME/logs
-IRONIC_VM_LOG_DIR=$HOME/ironic-bm-logs
+LOGFILE=/opt/stack/devstack.log
+SCREEN_LOGDIR=/opt/stack/logs
+IRONIC_VM_LOG_DIR=/opt/stack/ironic-bm-logs
 
 <% if node['ironic']['agent'] == 'agent_vbox' %>
 # Agent driver requires swift with tempurls

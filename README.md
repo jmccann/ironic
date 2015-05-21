@@ -10,14 +10,19 @@ Valid values include: `pxe_vbox` and `agent_vbox`
 
 # Setup the stack
 ```
-kitchen conv
-kitchen login
+bundle exec kitchen conv
+bundle exec kitchen login
 sudo su - stack
-cd devstack
-./stack.sh
 ```
 
 Now wait about 30 min.
+
+You can login to the instance on another terminal window and watch it build:
+```
+bundle exec kitchen login
+sudo su - stack
+tail -f /opt/stack/devstack/devstack.log
+```
 
 When it is done you can hit the dashboard @ http://localhost:8080/ admin:password
 
@@ -44,12 +49,6 @@ On Host:
 ./baremetal_vm.sh
 ```
 
-# Run prep script
-
-```
-/opt/stack/finalize.sh
-```
-
 # Verify stuff
 
 ```
@@ -64,7 +63,7 @@ Using pxe_vbox:
 ```
 source ~/devstack/openrc admin admin
 nova keypair-add default --pub-key ~/.ssh/id_rsa.pub
-image=$(nova image-list | egrep "$DEFAULT_IMAGE_NAME"'[^-]' | awk '{ print $2 }')
+image=$(nova image-list | egrep "cirros-.*-uec "'[^-]' | awk '{ print $2 }')
 
 ironic node-update $NODE_UUID add instance_info/root_gb=11
 ironic node-update $NODE_UUID add instance_info/image_source=$image
@@ -77,7 +76,7 @@ Using agent_vbox
 ```
 source ~/devstack/openrc admin admin
 nova keypair-add default --pub-key ~/.ssh/id_rsa.pub
-image=$(nova image-list | egrep "cirros-0.3.4-x86_64-disk"'[^-]' | awk '{ print $2 }')
+image=$(nova image-list | egrep "cirros-.*-x86_64-disk"'[^-]' | awk '{ print $2 }')
 
 ironic node-update $NODE_UUID add instance_info/root_gb=11
 ironic node-update $NODE_UUID add instance_info/image_source=$image

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Source creds
-. ~/devstack/openrc admin admin
+. /opt/stack/devstack/openrc admin admin
 
 # Setup networking
 sed -i -r -e 's/^type_drivers = .*/type_drivers = flat/g' /etc/neutron/plugins/ml2/ml2_conf.ini
