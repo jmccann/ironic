@@ -9,6 +9,8 @@ Valid values include: `pxe_vbox` and `agent_vbox`
  driver to use we are still using pxe_vbox.
 
 # Setup the stack
+
+## pxe_vbox
 ```
 bundle exec kitchen conv
 bundle exec kitchen login
@@ -23,6 +25,18 @@ bundle exec kitchen login
 sudo su - stack
 tail -f /opt/stack/devstack.log
 ```
+
+
+## agent_vbox
+```
+bundle exec kitchen conv
+bundle exec kitchen login
+sudo su - stack
+cd devstack/stack.sh
+./finalize.sh
+```
+
+# Dashboard
 
 When it is done you can hit the dashboard @ http://localhost:8080/ admin:password
 

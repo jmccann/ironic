@@ -48,6 +48,7 @@ execute 'stack.sh' do
   environment 'HOME' => '/opt/stack'
   timeout 7200
   creates '/opt/stack/devstack/.stacked'
+  not_if { node['ironic']['agent'] == 'agent_vbox' }
 end
 
 execute 'finalize.sh' do
@@ -55,4 +56,5 @@ execute 'finalize.sh' do
   user 'stack'
   command '/opt/stack/finalize.sh && touch /opt/stack/.finalized'
   creates '/opt/stack/.finalized'
+  not_if { node['ironic']['agent'] == 'agent_vbox' }
 end
