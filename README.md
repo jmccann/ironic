@@ -21,7 +21,7 @@ You can login to the instance on another terminal window and watch it build:
 ```
 bundle exec kitchen login
 sudo su - stack
-tail -f /opt/stack/devstack/devstack.log
+tail -f /opt/stack/devstack.log
 ```
 
 When it is done you can hit the dashboard @ http://localhost:8080/ admin:password
