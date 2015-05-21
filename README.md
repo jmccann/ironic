@@ -1,6 +1,13 @@
 Ironic
 ======
 
+# Attributes
+* `default['ironic']['agent']` (default: 'pxe_vbox') - What ironic agent to use.
+Valid values include: `pxe_vbox` and `agent_vbox`
+ * **Note**: agent_vbox will build a system but if set to net boot first will
+ hang on deploy image after reboot.  That is why even though it is the *preferred*
+ driver to use we are still using pxe_vbox.
+
 # Setup the stack
 ```
 kitchen conv
@@ -46,17 +53,31 @@ On Host:
 # Verify stuff
 
 ```
+source ~/devstack/openrc admin admin
 NODE_UUID=$(ironic node-list | egrep "my-baremetal"'[^-]' | awk '{ print $2 }')
 ironic node-show $NODE_UUID
 ironic node-validate $NODE_UUID
 ```
 
 # Boot an instance to the node
-
+Using pxe_vbox:
 ```
 source ~/devstack/openrc admin admin
 nova keypair-add default --pub-key ~/.ssh/id_rsa.pub
 image=$(nova image-list | egrep "$DEFAULT_IMAGE_NAME"'[^-]' | awk '{ print $2 }')
+
+ironic node-update $NODE_UUID add instance_info/root_gb=11
+ironic node-update $NODE_UUID add instance_info/image_source=$image
+
+net_id=$(neutron net-list | egrep "sharednet1"'[^-]' | awk '{ print $2 }')
+nova boot --flavor my-baremetal-flavor --nic net-id=$net_id --image $image --key-name default testing
+```
+
+Using agent_vbox
+```
+source ~/devstack/openrc admin admin
+nova keypair-add default --pub-key ~/.ssh/id_rsa.pub
+image=$(nova image-list | egrep "cirros-0.3.4-x86_64-disk"'[^-]' | awk '{ print $2 }')
 
 ironic node-update $NODE_UUID add instance_info/root_gb=11
 ironic node-update $NODE_UUID add instance_info/image_source=$image
