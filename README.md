@@ -63,6 +63,7 @@ Using pxe_vbox:
 ```
 source ~/devstack/openrc admin admin
 nova keypair-add default --pub-key ~/.ssh/id_rsa.pub
+NODE_UUID=$(ironic node-list | egrep "my-baremetal"'[^-]' | awk '{ print $2 }')
 image=$(nova image-list | egrep "cirros-.*-uec "'[^-]' | awk '{ print $2 }')
 
 ironic node-update $NODE_UUID add instance_info/root_gb=11
@@ -76,6 +77,7 @@ Using agent_vbox
 ```
 source ~/devstack/openrc admin admin
 nova keypair-add default --pub-key ~/.ssh/id_rsa.pub
+NODE_UUID=$(ironic node-list | egrep "my-baremetal"'[^-]' | awk '{ print $2 }')
 image=$(nova image-list | egrep "cirros-.*-x86_64-disk"'[^-]' | awk '{ print $2 }')
 
 ironic node-update $NODE_UUID add instance_info/root_gb=11
