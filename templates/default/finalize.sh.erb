@@ -45,6 +45,21 @@ sudo ifconfig eth1 up
 sudo ifconfig br-eth1 192.168.50.1 netmask 255.255.255.0 up
 
 # Update ironic to use new network for cleaning
+clean_net=$(neutron net-list | egrep "sharednet1"'[^-]' | awk '{print $2}')
+sed -i -r -e "s/^cleaning_network_uuid =.*/cleaning_network_uuid = $clean_net/g" /etc/ironic/ironic.conf
+
+# Update ironic to be able to use swift for agent based deploy
+swift_user=$(swift --os-username=service:glance-swift stat -v | grep -i url | grep -i storage | awk -F\/ '{print $NF}')
+swift_key=$(swift --os-username=service:glance-swift stat -v | grep -i url | grep -i key | awk '{print $3}')
+swift_url=$(swift --os-username=service:glance-swift stat -v | grep -i url | grep -i storage | awk '{print $2}' | sed -r -e 's~(https*://[0-9\.]+[\:0-9]*).*~\1~g')
+sed -i -r -e "s/^#swift_temp_url_key=.*/swift_temp_url_key=$swift_key/g" /etc/ironic/ironic.conf
+sed -i -r -e "s/^#swift_account=.*/swift_account=$swift_user/g" /etc/ironic/ironic.conf
+sed -i -r -e "s~^#swift_endpoint_url=.*~swift_endpoint_url=$swift_url~g" /etc/ironic/ironic.conf
+
+# Restart ironic conductor
+screen -S stack -X at ir-cond stuff $'\003' # Ctrl-C
+screen -S stack -X at ir-cond stuff $'\033[A' # Up arrow (for prev command)
+screen -S stack -X at ir-cond stuff $'\015' # Enter
 
 # Add agent deploy image
 if [[ ! -f coreos_production_pxe.vmlinuz ]]; then
@@ -102,4 +117,14 @@ nova flavor-key my-baremetal-flavor set cpu_arch=$ARCH
 for n in $(ironic node-list | awk '$4 == "None" {print $2}')
 do
   ironic node-delete $n
+done
+
+# Wait until nova sees the new hypervisor
+for n in $(seq 0 120) # Lets not endlessly loop
+do
+  if [[ $(nova hypervisor-list | grep $NODE_UUID | grep -c enabled) -gt 0 ]]; then
+    break # Hypervisor is up
+  fi
+  echo "Waiting for nova to see the hypervisor ($n) ..."
+  sleep 1
 done
