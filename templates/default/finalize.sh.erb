@@ -10,23 +10,20 @@ sed -i -r -e 's/^tenant_network_types = .*/tenant_network_types = flat/g' /etc/n
 sed -i -r -e 's/^# flat_networks =.*/flat_networks = physnet1/g' /etc/neutron/plugins/ml2/ml2_conf.ini
 sed -i -r -e 's/^# network_vlan_ranges =.*/network_vlan_ranges = physnet1/g' /etc/neutron/plugins/ml2/ml2_conf.ini
 sed -i -r -e 's/^# enable_security_group =.*/enable_security_group = True/g' /etc/neutron/plugins/ml2/ml2_conf.ini
-sed -i -r -e 's/^\[ovs\]/\[ovs\]\nbridge_mappings = physnet1:br-eth1/g' /etc/neutron/plugins/ml2/ml2_conf.ini
-sed -i -r -e 's/^\[ovs\]/\[ovs\]\nbridge_mappings = physnet1:br-eth1/g' /opt/stack/neutron/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini
+if [[ $(grep -c 'bridge_mappings = physnet1:br-eth1' /etc/neutron/plugins/ml2/ml2_conf.ini) -eq 0 ]]; then
+  sed -i -r -e 's/^\[ovs\]/\[ovs\]\nbridge_mappings = physnet1:br-eth1/g' /etc/neutron/plugins/ml2/ml2_conf.ini
+fi
+if [[ $(egrep -c '^bridge_mappings = physnet1:br-eth1' /opt/stack/neutron/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini) -eq 0 ]]; then
+  sed -i -r -e 's/^\[ovs\]/\[ovs\]\nbridge_mappings = physnet1:br-eth1/g' /opt/stack/neutron/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini
+fi
 
 sudo ovs-vsctl add-br br-eth1
 sudo ovs-vsctl add-port br-eth1 eth1
 
-<% if node['ironic']['agent'] == 'pxe_vbox' %>
-# Restart Open vSwitch agent (#9 q-agt)
-screen -S stack -X at 9 stuff $'\003' # Ctrl-C
-screen -S stack -X at 9 stuff $'\033[A' # Up arrow (for prev command)
-screen -S stack -X at 9 stuff $'\015' # Enter
-<% else %>
-# Restart Open vSwitch agent (#13 q-agt)
-screen -S stack -X at 13 stuff $'\003' # Ctrl-C
-screen -S stack -X at 13 stuff $'\033[A' # Up arrow (for prev command)
-screen -S stack -X at 13 stuff $'\015' # Enter
-<% end %>
+# Restart Open vSwitch agent (q-agt)
+screen -S stack -X at q-agt stuff $'\003' # Ctrl-C
+screen -S stack -X at q-agt stuff $'\033[A' # Up arrow (for prev command)
+screen -S stack -X at q-agt stuff $'\015' # Enter
 
 # Create new net and subnet
 TENANT_ID=admin
@@ -88,3 +85,9 @@ ARCH=x86_64
 
 nova flavor-create my-baremetal-flavor auto $RAM_MB $DISK_GB $CPU
 nova flavor-key my-baremetal-flavor set cpu_arch=$ARCH
+
+# Delete extra nodes
+for n in $(ironic node-list | awk '$4 == "None" {print $2}')
+do
+  ironic node-delete $n
+done
