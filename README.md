@@ -110,3 +110,4 @@ Can take up to like 10 sec before VM will auto power-on.  Be patient.
 * http://docs.openstack.org/developer/ironic/deploy/install-guide.html - Had additional notes for creating baremetal nodes in ironic ... details missing in other guides above.
 * https://www.rdoproject.org/Networking_in_too_much_detail - Crazy in depth info on how networking works in Openstack
 * https://software.intel.com/en-us/articles/physical-server-provisioning-with-openstack - More misc references
+* https://github.com/openstack/ironic/blob/master/doc/source/drivers/ilo.rst - Had useful references for agent based deploy ... like generating deploy image and configuring ironic to use swift
