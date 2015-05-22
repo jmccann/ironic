@@ -5,8 +5,8 @@ Ironic
 * `default['ironic']['agent']` (default: 'pxe_vbox') - What ironic agent to use.
 Valid values include: `pxe_vbox` and `agent_vbox`
  * **Note**: agent_vbox will build a system but if set to net boot first will
- hang on deploy image after reboot.  That is why even though it is the *preferred*
- driver to use we are still using pxe_vbox.
+ hang on deploy image after reboot.  THIS IS EXPECTED!  See note @ http://docs.openstack.org/developer/ironic/_modules/ironic/drivers/modules/virtualbox.html
+ * There are some PXE issues with agent_vbox that are still being worked through.  Currently you will need to follow instructions to stack and finalize.  It will probably not work.  You then need to unstack, stack again, finalize again and it should work.
 
 # Setup the stack
 
@@ -85,6 +85,7 @@ ironic node-update $NODE_UUID add instance_info/image_source=$image
 
 net_id=$(neutron net-list | egrep "sharednet1"'[^-]' | awk '{ print $2 }')
 nova boot --flavor my-baremetal-flavor --nic net-id=$net_id --image $image --key-name default testing
+ironic node-list
 ```
 
 Using agent_vbox
@@ -99,6 +100,7 @@ ironic node-update $NODE_UUID add instance_info/image_source=$image
 
 net_id=$(neutron net-list | egrep "sharednet1"'[^-]' | awk '{ print $2 }')
 nova boot --flavor my-baremetal-flavor --nic net-id=$net_id --image $image --key-name default testing
+ironic node-list
 ```
 
 Can take up to like 10 sec before VM will auto power-on.  Be patient.
