@@ -86,7 +86,7 @@ IMG_RAM=$(glance image-list | egrep 'ir-deploy-agent.initramfs ' | awk '{print $
 NODE_UUID=$(ironic node-create -n my-baremetal -d agent_vbox -i virtualbox_host='10.0.2.2' -i virtualbox_vmname='baremetal' | grep uuid | awk '{print $4}' | head -1)
 <% end %>
 
-RAM_MB=2048
+RAM_MB=4096
 CPU=1
 DISK_GB=11
 ARCH=x86_64
@@ -105,7 +105,7 @@ ironic node-update $NODE_UUID add driver_info/deploy_ramdisk=$IMG_RAM
 ironic port-create -n $NODE_UUID -a $MAC_ADDRESS
 
 # Create new flavor in nova for baremetal
-RAM_MB=2048
+RAM_MB=4096
 CPU=1
 DISK_GB=11
 ARCH=x86_64
