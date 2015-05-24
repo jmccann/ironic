@@ -95,8 +95,8 @@ nova keypair-add default --pub-key ~/.ssh/id_rsa.pub
 NODE_UUID=$(ironic node-list | egrep "my-baremetal"'[^-]' | awk '{ print $2 }')
 image=$(nova image-list | egrep "cirros-.*-x86_64-disk"'[^-]' | awk '{ print $2 }')
 
-ironic node-update $NODE_UUID add instance_info/root_gb=11
 ironic node-update $NODE_UUID add instance_info/image_source=$image
+ironic node-update $NODE_UUID add instance_info/root_gb=11
 
 net_id=$(neutron net-list | egrep "sharednet1"'[^-]' | awk '{ print $2 }')
 nova boot --flavor my-baremetal-flavor --nic net-id=$net_id --image $image --key-name default testing
@@ -104,6 +104,10 @@ ironic node-list
 ```
 
 Can take up to like 10 sec before VM will auto power-on.  Be patient.
+
+# Notes
+
+To get CentOS 7 to work can to move /etc/sysconfig/network-scripts/ifcfg-eth0 to /etc/sysconfig/network-scripts/ifcfg-enp0s3 and edit 'DEVICE' in the file to 'enp0s3'.
 
 # Resources
 
@@ -113,3 +117,4 @@ Can take up to like 10 sec before VM will auto power-on.  Be patient.
 * https://www.rdoproject.org/Networking_in_too_much_detail - Crazy in depth info on how networking works in Openstack
 * https://software.intel.com/en-us/articles/physical-server-provisioning-with-openstack - More misc references
 * https://github.com/openstack/ironic/blob/master/doc/source/drivers/ilo.rst - Had useful references for agent based deploy ... like generating deploy image and configuring ironic to use swift
+* http://docs.openstack.org/image-guide/content/ch_modifying_images.html - How to edit images
