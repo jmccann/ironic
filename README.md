@@ -2,7 +2,7 @@ Ironic
 ======
 
 # Attributes
-* `default['ironic']['agent']` (default: 'pxe_vbox') - What ironic agent to use.
+* `default['ironic']['agent']` (default: 'agent_vbox') - What ironic agent to use.
 Valid values include: `pxe_vbox` and `agent_vbox`
  * **Note**: agent_vbox will build a system but if set to net boot first will
  hang on deploy image after reboot.  THIS IS EXPECTED!  See note @ http://docs.openstack.org/developer/ironic/_modules/ironic/drivers/modules/virtualbox.html
