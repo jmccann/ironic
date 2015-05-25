@@ -33,6 +33,10 @@ template '/opt/stack/finalize.sh' do
   user 'stack'
   mode 0750
 end
+template '/opt/stack/centos_7.sh' do
+  user 'stack'
+  mode 0750
+end
 
 # Want to stack automatically but sudo tty issues?  But another cookbook does it fine ...
 # execute 'unstack.sh' do

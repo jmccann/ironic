@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Download ...
+wget http://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
+
+# Edit ...
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y install libguestfs-tools
+sudo update-guestfs-appliance
+sudo virt-edit -a CentOS-7-x86_64-GenericCloud.qcow2 /etc/sysconfig/network-scripts/ifcfg-eth0 -e 's/eth0/enp0s3/g'
+sudo guestfish --rw -a CentOS-7-x86_64-GenericCloud.qcow2 -m /dev/sda1:/ <<_EOF_
+mv /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-enp0s3
+_EOF_
+
+# and add CentOS 7 image
+glance image-create --name centos7 --is-public true --disk-format qcow2 \
+                    --container-format bare \
+                    --file CentOS-7-x86_64-GenericCloud.qcow2
