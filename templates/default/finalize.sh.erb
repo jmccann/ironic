@@ -1,5 +1,12 @@
 #!/bin/bash
 
+function restart_stack_service {
+  echo "Restarting stack service '$1' ..."
+  screen -S stack -X at $1 stuff $'\003' # Ctrl-C
+  screen -S stack -X at $1 stuff $'\033[A' # Up arrow (for prev command)
+  screen -S stack -X at $1 stuff $'\015' # Enter
+}
+
 # Source creds
 . /opt/stack/devstack/openrc admin admin
 
@@ -21,9 +28,7 @@ sudo ovs-vsctl add-br br-eth1
 sudo ovs-vsctl add-port br-eth1 eth1
 
 # Restart Open vSwitch agent (q-agt)
-screen -S stack -X at q-agt stuff $'\003' # Ctrl-C
-screen -S stack -X at q-agt stuff $'\033[A' # Up arrow (for prev command)
-screen -S stack -X at q-agt stuff $'\015' # Enter
+restart_stack_service 'q-agt'
 
 # Create new net and subnet
 TENANT_ID=admin
@@ -57,9 +62,7 @@ sed -i -r -e "s/^#swift_account=.*/swift_account=$swift_user/g" /etc/ironic/iron
 sed -i -r -e "s~^#swift_endpoint_url=.*~swift_endpoint_url=$swift_url~g" /etc/ironic/ironic.conf
 
 # Restart ironic conductor
-screen -S stack -X at ir-cond stuff $'\003' # Ctrl-C
-screen -S stack -X at ir-cond stuff $'\033[A' # Up arrow (for prev command)
-screen -S stack -X at ir-cond stuff $'\015' # Enter
+restart_stack_service 'ir-cond'
 
 # Add agent deploy image
 if [[ ! -f coreos_production_pxe.vmlinuz ]]; then
@@ -123,8 +126,17 @@ done
 for n in $(seq 0 120) # Lets not endlessly loop
 do
   if [[ $(nova hypervisor-list | grep $NODE_UUID | grep -c enabled) -gt 0 ]]; then
-    break # Hypervisor is up
+    if [[ $(nova hypervisor-stats | grep free_disk_gb | grep -c 11) -gt 0  ]]; then
+      break # Hypervisor is up
+    fi
   fi
   echo "Waiting for nova to see the hypervisor ($n) ..."
   sleep 1
+done
+
+# Restart ALL services ... for fun?
+for n in $(screen -Q windows | sed -r -e 's/\(L\) /\n/g' | grep -v -e shell -e dstat | awk '{print $1}')
+do
+  restart_stack_service "$n"
+  sleep 5
 done
