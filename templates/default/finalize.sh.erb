@@ -123,7 +123,7 @@ do
 done
 
 # Wait until nova sees the new hypervisor
-for n in $(seq 0 120) # Lets not endlessly loop
+for n in $(seq 0 40) # Lets not endlessly loop
 do
   if [[ $(nova hypervisor-list | grep $NODE_UUID | grep -c enabled) -gt 0 ]]; then
     if [[ $(nova hypervisor-stats | grep free_disk_gb | grep -c 11) -gt 0  ]]; then
@@ -131,7 +131,7 @@ do
     fi
   fi
   echo "Waiting for nova to see the hypervisor ($n) ..."
-  sleep 1
+  sleep 3
 done
 
 # Restart ALL services ... for fun?
