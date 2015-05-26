@@ -117,3 +117,5 @@ To get CentOS 7 to work can to move /etc/sysconfig/network-scripts/ifcfg-eth0 to
 * https://software.intel.com/en-us/articles/physical-server-provisioning-with-openstack - More misc references
 * https://github.com/openstack/ironic/blob/master/doc/source/drivers/ilo.rst - Had useful references for agent based deploy ... like generating deploy image and configuring ironic to use swift
 * http://docs.openstack.org/image-guide/content/ch_modifying_images.html - How to edit images
+* https://developer.rackspace.com/blog/how-we-run-ironic-and-you-can-too/ - Great writeup on how rackspace is using ironic
+* https://github.com/rackerlabs/ironic-neutron-plugin - ironic/neutron plugin for managing cisco nexus hardware???
