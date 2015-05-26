@@ -12,6 +12,7 @@ mv /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcf
 _EOF_
 
 # and add CentOS 7 image
+. /opt/stack/devstack/openrc admin admin
 glance image-create --name centos7 --is-public true --disk-format qcow2 \
                     --container-format bare \
                     --file CentOS-7-x86_64-GenericCloud.qcow2
