@@ -98,7 +98,7 @@ ironic node-update $NODE_UUID add instance_info/image_source=$image
 ironic node-update $NODE_UUID add instance_info/root_gb=11
 
 net_id=$(neutron net-list | egrep "sharednet1"'[^-]' | awk '{ print $2 }')
-nova boot --flavor my-baremetal-flavor --nic net-id=$net_id --image $image --key-name default testing
+nova boot --flavor my-baremetal-flavor --nic net-id=$net_id --image $image --key-name default testing --user-data /opt/stack/user_script.sh
 ironic node-list
 ```
 
