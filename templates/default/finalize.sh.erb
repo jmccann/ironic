@@ -61,8 +61,12 @@ sed -i -r -e "s/^#swift_temp_url_key=.*/swift_temp_url_key=$swift_key/g" /etc/ir
 sed -i -r -e "s/^#swift_account=.*/swift_account=$swift_user/g" /etc/ironic/ironic.conf
 sed -i -r -e "s~^#swift_endpoint_url=.*~swift_endpoint_url=$swift_url~g" /etc/ironic/ironic.conf
 
-# Restart ironic conductor
-restart_stack_service 'ir-cond'
+# Restart ALL services ... for fun?
+for n in $(screen -Q windows | sed -r -e 's/\(L\) /\n/g' | grep -v -e shell -e dstat | awk '{print $1}')
+do
+  restart_stack_service "$n"
+  sleep 5
+done
 
 # Add agent deploy image
 if [[ ! -f coreos_production_pxe.vmlinuz ]]; then
@@ -132,11 +136,4 @@ do
   fi
   echo "Waiting for nova to see the hypervisor ($n) ..."
   sleep 3
-done
-
-# Restart ALL services ... for fun?
-for n in $(screen -Q windows | sed -r -e 's/\(L\) /\n/g' | grep -v -e shell -e dstat | awk '{print $1}')
-do
-  restart_stack_service "$n"
-  sleep 5
 done
