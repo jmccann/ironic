@@ -1,68 +1,25 @@
-include_recipe 'apt::default'
-include_recipe 'git::default'
+include_recipe 'yum::default'
 
-git '/var/tmp/devstack' do
-  repository 'https://github.com/openstack-dev/devstack.git'
-  action :sync
+include_recipe 'openstack-common::default'
+include_recipe 'openstack-common::logging'
+include_recipe 'openstack-common::set_endpoints_by_interface'
+include_recipe 'openstack-common::sysctl'
+
+include_recipe 'openstack-ops-database::server'
+include_recipe 'openstack-ops-database::openstack-db'
+
+include_recipe 'openstack-ops-messaging::server'
+
+package 'openstack-keystone' do
+  options '--nogpgcheck'
 end
 
-# Correct dependency issues I ran into on Fedora
-# package 'bridge-utils'
-# package 'vim-minimal' do
-#   action :upgrade
-# end
-include_recipe 'ironic::vbox_driver_prereq'
+include_recipe 'openstack-identity::server'
+include_recipe 'openstack-identity::registration'
 
-execute '/var/tmp/devstack/tools/create-stack-user.sh' do
-  not_if 'egrep "^[ \t]*stack:" /etc/passwd'
-end
+# Hacky hack to get ironic-conductor to install
+include_recipe 'ironic::conductor'
 
-execute "ssh-keygen -N '' -f /opt/stack/.ssh/id_rsa" do
-  creates '/opt/stack/.ssh/id_rsa'
-  user 'stack'
-end
-
-execute 'git clone https://github.com/openstack-dev/devstack.git devstack' do
-  cwd '/opt/stack'
-  user 'stack'
-  not_if '[ -d devstack ]'
-end
-
-template '/opt/stack/devstack/local.conf'
-template '/opt/stack/finalize.sh' do
-  user 'stack'
-  mode 0750
-end
-template '/opt/stack/centos_7.sh' do
-  user 'stack'
-  mode 0750
-end
-template '/opt/stack/user_script.sh' do
-  user 'stack'
-  mode 0750
-end
-
-# Want to stack automatically but sudo tty issues?  But another cookbook does it fine ...
-# execute 'unstack.sh' do
-#   cwd '/opt/stack/devstack'
-#   command '/opt/stack/devstack/unstack.sh'
-#   user 'stack'
-# end
-
-execute 'stack.sh' do
-  cwd '/opt/stack/devstack'
-  command '/opt/stack/devstack/stack.sh && touch /opt/stack/devstack/.stacked'
-  user 'stack'
-  environment 'HOME' => '/opt/stack'
-  timeout 7200
-  creates '/opt/stack/devstack/.stacked'
-  not_if { node['ironic']['agent'] == 'agent_vbox' }
-end
-
-execute 'finalize.sh' do
-  cwd '/opt/stack'
-  user 'stack'
-  command '/opt/stack/finalize.sh && touch /opt/stack/.finalized'
-  creates '/opt/stack/.finalized'
-  not_if { node['ironic']['agent'] == 'agent_vbox' }
-end
+include_recipe 'openstack-bare-metal::conductor'
+include_recipe 'openstack-bare-metal::api'
+include_recipe 'openstack-bare-metal::identity_registration'
