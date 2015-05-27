@@ -68,16 +68,6 @@ do
   sleep 5
 done
 
-# Add agent deploy image
-if [[ ! -f coreos_production_pxe.vmlinuz ]]; then
-  wget http://tarballs.openstack.org/ironic-python-agent/coreos/files/coreos_production_pxe.vmlinuz
-fi
-if [[ ! -f coreos_production_pxe_image-oem.cpio.gz ]]; then
-  wget http://tarballs.openstack.org/ironic-python-agent/coreos/files/coreos_production_pxe_image-oem.cpio.gz
-fi
-glance image-create --name ir-deploy-agent.kernel --disk-format aki --container-format aki < coreos_production_pxe.vmlinuz
-glance image-create --name ir-deploy-agent.initramfs --disk-format ari --container-format ari < coreos_production_pxe_image-oem.cpio.gz
-
 # Create a new node in ironic
 MAC_ADDRESS='08:00:27:6E:DF:70' # Set from baremetal_vm.sh
 
@@ -88,8 +78,8 @@ IMG_RAM=$(glance image-list | egrep 'ir-deploy-pxe_ssh.initramfs ' | awk '{print
 NODE_UUID=$(ironic node-create -n my-baremetal -d pxe_vbox -i virtualbox_host='10.0.2.2' -i virtualbox_vmname='baremetal' | grep uuid | awk '{print $4}' | head -1)
 <% else %>
 IMG_SRC=$(glance image-list | egrep -- '-disk ' | awk '{print $2}') # For agent_vbox
-IMG_KERN=$(glance image-list | egrep 'ir-deploy-agent.kernel ' | awk '{print $2}') # ir-deploy for agent_vbox
-IMG_RAM=$(glance image-list | egrep 'ir-deploy-agent.initramfs ' | awk '{print $2}') # ir-deploy for agent_vbox
+IMG_KERN=$(glance image-list | egrep 'ir-deploy-agent_vbox.kernel ' | awk '{print $2}') # ir-deploy for agent_vbox
+IMG_RAM=$(glance image-list | egrep 'ir-deploy-agent_vbox.initramfs ' | awk '{print $2}') # ir-deploy for agent_vbox
 NODE_UUID=$(ironic node-create -n my-baremetal -d agent_vbox -i virtualbox_host='10.0.2.2' -i virtualbox_vmname='baremetal' | grep uuid | awk '{print $4}' | head -1)
 <% end %>
 
