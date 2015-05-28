@@ -7,3 +7,4 @@ cookbook 'openstack-ops-database', git: 'git@github.com:stackforge/cookbook-open
 cookbook 'openstack-ops-messaging', git: 'git@github.com:stackforge/cookbook-openstack-ops-messaging.git'
 cookbook 'openstack-identity', git: 'git@github.com:stackforge/cookbook-openstack-identity.git'
 cookbook 'openstack-bare-metal', git: 'git@github.com:stackforge/cookbook-openstack-bare-metal.git'
+cookbook 'openstack-image', git: 'git@github.com:stackforge/cookbook-openstack-image.git'

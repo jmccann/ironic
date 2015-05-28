@@ -11,12 +11,13 @@ include_recipe 'openstack-ops-database::openstack-db'
 
 include_recipe 'openstack-ops-messaging::server'
 
-package 'openstack-keystone' do
-  options '--nogpgcheck'
-end
-
 include_recipe 'openstack-identity::server'
 include_recipe 'openstack-identity::registration'
+
+include_recipe 'openstack-image::api'
+include_recipe 'openstack-image::registry'
+include_recipe 'openstack-image::identity_registration'
+include_recipe 'openstack-image::image_upload'
 
 # Hacky hack to get ironic-conductor to install
 include_recipe 'ironic::conductor'
