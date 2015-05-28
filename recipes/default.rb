@@ -4,6 +4,7 @@ include_recipe 'openstack-common::default'
 include_recipe 'openstack-common::logging'
 include_recipe 'openstack-common::set_endpoints_by_interface'
 include_recipe 'openstack-common::sysctl'
+include_recipe 'openstack-common::openrc'
 
 include_recipe 'openstack-ops-database::server'
 include_recipe 'openstack-ops-database::openstack-db'
