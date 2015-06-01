@@ -19,4 +19,6 @@ platforms:
 suites:
   - name: default
     run_list:
+      - role[test]
       - recipe[ironic::default]
+      - recipe[openstack-object-storage::setup] # Bug?  Should search run_list including include_recipe?

@@ -19,6 +19,17 @@ include_recipe 'openstack-image::registry'
 include_recipe 'openstack-image::identity_registration'
 include_recipe 'openstack-image::image_upload'
 
+include_recipe 'openstack-object-storage::common'
+include_recipe 'openstack-object-storage::storage-common'
+include_recipe 'ironic::block_device'
+include_recipe 'ironic::account-server'
+include_recipe 'ironic::container-server'
+include_recipe 'ironic::object-server'
+
+include_recipe 'openstack-object-storage::proxy-server'
+include_recipe 'openstack-object-storage::client'
+include_recipe 'openstack-object-storage::identity_registration'
+
 # Hacky hack to get ironic-conductor to install
 include_recipe 'ironic::conductor'
 
