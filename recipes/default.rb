@@ -39,6 +39,7 @@ include_recipe 'ironic::populate_neutron'
 
 include_recipe 'openstack-compute::nova-setup'
 include_recipe 'openstack-compute::client'
+include_recipe 'openstack-compute::scheduler'
 include_recipe 'openstack-compute::api-metadata'
 include_recipe 'openstack-compute::conductor'
 include_recipe 'openstack-compute::compute'
