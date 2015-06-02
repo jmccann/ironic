@@ -1026,6 +1026,11 @@ url=<%= @network_endpoint %>
 # (string value)
 #auth_strategy=keystone
 
+# Network uuid to perform cleaning of node on
+<% unless node['openstack']['bare-metal']['neutron']['cleaning_network_uuid'].to_s.empty? %>
+cleaning_network_uuid = <%= node['openstack']['bare-metal']['neutron']['cleaning_network_uuid'] %>
+<% end %>
+
 
 [oslo_messaging_amqp]
 
