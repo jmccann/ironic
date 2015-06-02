@@ -680,12 +680,18 @@ connection=<%= @db_connection %>
 # The secret token given to Swift to allow temporary URL
 # downloads. Required for temporary URLs. (string value)
 #swift_temp_url_key=<None>
+<% unless node['openstack']['bare-metal']['swift']['temp_url_key'].to_s.empty? %>
+swift_temp_url_key = <%= node['openstack']['bare-metal']['swift']['temp_url_key'].to_s %>
+<% end %>
 
 # The length of time in seconds that the temporary URL will be
 # valid for. Defaults to 20 minutes. If some deploys get a 401
 # response code when trying to download from the temporary
 # URL, try raising this duration. (integer value)
 #swift_temp_url_duration=1200
+<% unless node['openstack']['bare-metal']['swift']['temp_url_duration'].to_s.empty? %>
+swift_temp_url_duration = <%= node['openstack']['bare-metal']['swift']['temp_url_duration'].to_s %>
+<% end %>
 
 # The "endpoint" (scheme, hostname, optional port) for the
 # Swift URL of the form
@@ -694,12 +700,18 @@ connection=<%= @db_connection %>
 # "https://swift.example.com". Required for temporary URLs.
 # (string value)
 #swift_endpoint_url=<None>
+<% unless node['openstack']['bare-metal']['swift']['endpoint_url'].to_s.empty? %>
+swift_endpoint_url = <%= node['openstack']['bare-metal']['swift']['endpoint_url'] %>
+<% end %>
 
 # The Swift API version to create a temporary URL for.
 # Defaults to "v1". Swift temporary URL format:
 # "endpoint_url/api_version/account/container/object_id"
 # (string value)
 #swift_api_version=v1
+<% unless node['openstack']['bare-metal']['swift']['api_version'].to_s.empty? %>
+swift_api_version = <%= node['openstack']['bare-metal']['swift']['api_version'] %>
+<% end %>
 
 # The account that Glance uses to communicate with Swift. The
 # format is "AUTH_uuid". "uuid" is the UUID for the account
@@ -710,6 +722,9 @@ connection=<%= @db_connection %>
 # "endpoint_url/api_version/account/container/object_id"
 # (string value)
 #swift_account=<None>
+<% unless node['openstack']['bare-metal']['swift']['account'].to_s.empty? %>
+swift_account = <%= node['openstack']['bare-metal']['swift']['account'] %>
+<% end %>
 
 # The Swift container Glance is configured to store its images
 # in. Defaults to "glance", which is the default in glance-
@@ -717,7 +732,9 @@ connection=<%= @db_connection %>
 # "endpoint_url/api_version/account/container/object_id"
 # (string value)
 #swift_container=glance
-
+<% unless node['openstack']['bare-metal']['swift']['container'].to_s.empty? %>
+swift_container = <%= node['openstack']['bare-metal']['swift']['container'] %>
+<% end %>
 
 #
 # Options defined in ironic.common.image_service
