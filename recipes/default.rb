@@ -18,6 +18,7 @@ include_recipe 'openstack-image::api'
 include_recipe 'openstack-image::registry'
 include_recipe 'openstack-image::identity_registration'
 include_recipe 'openstack-image::image_upload'
+include_recipe 'ironic::deploy_agent'
 
 include_recipe 'openstack-object-storage::common'
 include_recipe 'openstack-object-storage::storage-common'
