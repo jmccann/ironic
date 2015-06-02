@@ -5,7 +5,7 @@ end
 
 execute 'create private subnet' do
   command 'source ~/openrc && neutron subnet-create --name private-subnet private 10.1.0.0/24'
-  not_if "source ~/openrc && neutron subnet-list -F name | grep '| private-subnet |'"
+  not_if "source ~/openrc && neutron subnet-list -F name | egrep '\|[ ]+private-subnet[ ]+\|'"
 end
 
 execute 'create baremetal net' do
