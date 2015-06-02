@@ -25,6 +25,9 @@ suites:
       openstack:
         endpoints:
           bind-host: 0.0.0.0
+        network:
+          l3:
+            external_network_bridge_interface: enp0s8
         bare-metal:
           enabled_drivers: 'fake,pxe_ssh,pxe_ipmitool,pxe_vbox,agent_vbox,agent_ssh,agent_ipmitool'
           swift:

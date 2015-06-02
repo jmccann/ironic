@@ -11,11 +11,9 @@ default['openstack']['object-storage']['container_server_chef_role']  = 'test'
 
 default['openstack']['compute']['network']['service_type'] = 'neutron'
 default['openstack']['network']['dhcp']['dnsmasq_rpm_version'] = ''
-default['openstack']['network']['ryu']['tunnel_interface'] = 'enp0s3'
-default['openstack']['network']['l3']['external_network_bridge_interface'] = 'enp0s8'
 default['openstack']['network']['ml2']['tenant_network_types'] = 'flat'
-default['openstack']['network']['ml2']['network_vlan_ranges'] = 'baremetal'
-default['openstack']['network']['openvswitch']['bridge_mappings'] = 'baremetal:br-ex'
+default['openstack']['network']['ml2']['network_vlan_ranges'] = 'physbaremetal'
+default['openstack']['network']['openvswitch']['bridge_mappings'] = 'physbaremetal:br-ex'
 
 # Think these are needed since we are using rdo-manager-release repo for openstack-ironic
 default['openstack']['image']['platform']['package_overrides'] = '--nogpgcheck'
