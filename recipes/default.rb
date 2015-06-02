@@ -25,10 +25,16 @@ include_recipe 'ironic::block_device'
 include_recipe 'ironic::account-server'
 include_recipe 'ironic::container-server'
 include_recipe 'ironic::object-server'
-
 include_recipe 'openstack-object-storage::proxy-server'
 include_recipe 'openstack-object-storage::client'
 include_recipe 'openstack-object-storage::identity_registration'
+
+include_recipe 'openstack-network::openvswitch'
+include_recipe 'openstack-network::server'
+include_recipe 'openstack-network::dhcp_agent'
+include_recipe 'openstack-network::l3_agent'
+include_recipe 'openstack-network::identity_registration'
+include_recipe 'ironic::populate_neutron'
 
 # Hacky hack to get ironic-conductor to install
 include_recipe 'ironic::conductor'
