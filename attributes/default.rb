@@ -16,6 +16,7 @@ default['openstack']['network']['ml2']['network_vlan_ranges'] = 'physbaremetal'
 default['openstack']['network']['openvswitch']['bridge_mappings'] = 'physbaremetal:br-ex'
 
 # Think these are needed since we are using rdo-manager-release repo for openstack-ironic
+default['openstack']['compute']['platform']['package_overrides'] = '--nogpgcheck'
 default['openstack']['image']['platform']['package_overrides'] = '--nogpgcheck'
 default['openstack']['identity']['platform']['package_options'] = '--nogpgcheck'
 default['openstack']['object-storage']['platform']['override_options'] = '--nogpgcheck' # bug of duplicate type options?

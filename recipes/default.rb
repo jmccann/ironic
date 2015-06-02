@@ -37,6 +37,14 @@ include_recipe 'openstack-network::l3_agent'
 include_recipe 'openstack-network::identity_registration'
 include_recipe 'ironic::populate_neutron'
 
+include_recipe 'openstack-compute::nova-setup'
+include_recipe 'openstack-compute::client'
+include_recipe 'openstack-compute::api-metadata'
+include_recipe 'openstack-compute::conductor'
+include_recipe 'openstack-compute::compute'
+include_recipe 'openstack-compute::api-os-compute'
+include_recipe 'openstack-compute::identity_registration'
+
 # Hacky hack to get ironic-conductor to install
 include_recipe 'ironic::conductor'
 include_recipe 'ironic::vbox_driver_prereq'

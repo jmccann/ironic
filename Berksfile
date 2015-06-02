@@ -10,4 +10,5 @@ cookbook 'openstack-bare-metal', github: 'stackforge/cookbook-openstack-bare-met
 cookbook 'openstack-image', github: 'stackforge/cookbook-openstack-image'
 cookbook 'openstack-object-storage', github: 'stackforge/cookbook-openstack-object-storage'
 cookbook 'openstack-network', github: 'stackforge/cookbook-openstack-network'
+cookbook 'openstack-compute', github: 'stackforge/cookbook-openstack-compute'
 cookbook 'statsd', github: 'att-cloud/cookbook-statsd'
