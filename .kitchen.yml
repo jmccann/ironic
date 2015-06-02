@@ -21,3 +21,7 @@ suites:
     run_list:
       - recipe[ironic::default]
       - recipe[openstack-object-storage::setup] # Bug?  Should search run_list including include_recipe?
+    attributes:
+      openstack:
+        bare-metal:
+          enabled_drivers: 'fake,pxe_ssh,pxe_ipmitool,pxe_vbox,agent_vbox,agent_ssh,agent_ipmitool'

@@ -19,3 +19,5 @@ default['openstack']['image']['platform']['package_overrides'] = '--nogpgcheck'
 default['openstack']['identity']['platform']['package_options'] = '--nogpgcheck'
 default['openstack']['object-storage']['platform']['override_options'] = '--nogpgcheck' # bug of duplicate type options?
 default['openstack']['object-storage']['platform']['package_overrides'] = '--nogpgcheck' # bug of duplicate type options?
+
+default['openstack']['bare-metal']['enabled_drivers'] = 'pxe_ipmitool'
