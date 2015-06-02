@@ -9,7 +9,12 @@ default['openstack']['object-storage']['object_server_chef_role']     = 'test'
 default['openstack']['object-storage']['account_server_chef_role']    = 'test'
 default['openstack']['object-storage']['container_server_chef_role']  = 'test'
 
+default['openstack']['compute']['driver'] = 'nova.virt.ironic.IronicDriver'
+default['openstack']['compute']['scheduler']['scheduler_host_manager'] = 'nova.scheduler.ironic_host_manager.IronicHostManager'
+default['openstack']['compute']['config']['ram_allocation_ratio'] = '1.0'
+default['openstack']['compute']['config']['reserved_host_memory_mb'] = 0
 default['openstack']['compute']['network']['service_type'] = 'neutron'
+
 default['openstack']['network']['dhcp']['dnsmasq_rpm_version'] = ''
 default['openstack']['network']['ml2']['tenant_network_types'] = 'flat'
 default['openstack']['network']['ml2']['network_vlan_ranges'] = 'physbaremetal'
