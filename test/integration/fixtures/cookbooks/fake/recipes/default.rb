@@ -13,6 +13,16 @@ admin_user = node['openstack']['identity']['admin_user']
 admin_pass = get_password 'user', admin_user
 admin_tenant = node['openstack']['identity']['admin_tenant_name']
 
+execute 'ssh-keygen -t rsa -N "" -f /root/.ssh/id_rsa' do
+  creates '/root/.ssh/id_rsa'
+end
+
+execute 'nova keypair-add default --pub-key ~/.ssh/id_rsa.pub' do
+  environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
+              'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
+  not_if 'nova keypair-list | grep default'
+end
+
 execute "ironic node-create -n my-baremetal -d agent_vbox -i virtualbox_host='10.0.2.2' -i virtualbox_vmname='baremetal'" do
   environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
               'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
