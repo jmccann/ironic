@@ -29,6 +29,8 @@ suites:
           l3:
             external_network_bridge_interface: enp0s8
         bare-metal:
+          tftp:
+            server: 10.0.2.15
           enabled_drivers: 'fake,pxe_ssh,pxe_ipmitool,pxe_vbox,agent_vbox,agent_ssh,agent_ipmitool'
           swift:
             temp_url_duration: 3600
