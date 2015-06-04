@@ -1,4 +1,5 @@
 include_recipe 'yum::default'
+package 'deltarpm'
 
 include_recipe 'openstack-common::default'
 include_recipe 'openstack-common::logging'
@@ -40,6 +41,7 @@ include_recipe 'ironic::populate_neutron'
 # Hacky hack to get ironic-conductor to install
 include_recipe 'ironic::conductor'
 include_recipe 'ironic::vbox_driver_prereq'
+include_recipe 'ironic::tftp'
 
 include_recipe 'openstack-bare-metal::conductor'
 include_recipe 'openstack-bare-metal::api'
