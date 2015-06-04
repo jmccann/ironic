@@ -12,3 +12,5 @@ cookbook 'openstack-object-storage', github: 'stackforge/cookbook-openstack-obje
 cookbook 'openstack-network', github: 'stackforge/cookbook-openstack-network'
 cookbook 'openstack-compute', github: 'stackforge/cookbook-openstack-compute'
 cookbook 'statsd', github: 'att-cloud/cookbook-statsd'
+
+cookbook 'fake', path: 'test/integration/fixtures/cookbooks/fake'

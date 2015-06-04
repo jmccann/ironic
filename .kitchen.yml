@@ -21,6 +21,7 @@ suites:
     run_list:
       - recipe[ironic::default]
       - recipe[openstack-object-storage::setup] # Bug?  Should search run_list including include_recipe?
+      - recipe[fake::default]
     attributes:
       openstack:
         endpoints:
