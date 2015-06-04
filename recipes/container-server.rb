@@ -1,3 +1,5 @@
+# Copy of original container-server minus openstack-object-storage::disks recipe
+
 include_recipe 'openstack-object-storage::common'
 include_recipe 'openstack-object-storage::storage-common'
 
