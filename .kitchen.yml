@@ -26,9 +26,6 @@ suites:
       openstack:
         endpoints:
           bind-host: 0.0.0.0
-        network:
-          l3:
-            external_network_bridge_interface: enp0s8
         bare-metal:
           api_url: http://10.0.2.15:6385
           tftp:
