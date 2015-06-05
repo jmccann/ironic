@@ -44,9 +44,12 @@ include_recipe 'ironic::conductor'
 include_recipe 'ironic::vbox_driver_prereq'
 include_recipe 'ironic::tftp'
 
+include_recipe 'ironic::ironic_overrides'
 include_recipe 'openstack-bare-metal::conductor'
 include_recipe 'openstack-bare-metal::api'
-include_recipe 'ironic::ironic_overrides'
+# Contribute attributizing: enabled-drivers, swift
+r = resources('template[/etc/ironic/ironic.conf]')
+r.cookbook 'ironic'
 include_recipe 'openstack-bare-metal::identity_registration'
 
 include_recipe 'openstack-compute::nova-setup'
