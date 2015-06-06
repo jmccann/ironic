@@ -21,6 +21,10 @@ execute 'nova keypair-add default --pub-key ~/.ssh/id_rsa.pub' do
   environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
               'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
   not_if 'nova keypair-list | grep default'
+
+  # Start ironic before next resource ... why don't they start right away? :(
+  notifies :start, 'service[ironic-conductor]', :immediately
+  notifies :start, 'service[ironic-api]', :immediately
 end
 
 execute "ironic node-create -n my-baremetal -d agent_vbox -i virtualbox_host='10.0.2.2' -i virtualbox_vmname='baremetal'" do
