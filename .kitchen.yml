@@ -26,7 +26,10 @@ suites:
       openstack:
         endpoints:
           bind-host: 0.0.0.0
+        compute:
+          debug: True
         bare-metal:
+          debug: True
           api_url: http://10.0.2.15:6385
           tftp:
             server: 10.0.2.15
