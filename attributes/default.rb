@@ -3,11 +3,18 @@ default['openstack']['databag_type'] = 'standard'
 default['openstack']['db']['service_type'] = 'mysql'
 
 default['openstack']['object-storage']['tempurl']['enabled'] = true
-default['openstack']['object-storage']['auto_rebuild_rings'] = true
 
 default['openstack']['object-storage']['object_server_chef_role']     = 'test'
 default['openstack']['object-storage']['account_server_chef_role']    = 'test'
 default['openstack']['object-storage']['container_server_chef_role']  = 'test'
+
+default['openstack']['image']['api']['default_store'] = 'swift'
+default['openstack']['image']['api']['stores'] = ['file', 'http', 'swift']
+default['openstack']['image']['api']['swift_store_auth_address'] = 'http://10.0.2.15:5000/v2.0'
+default['openstack']['image']['api']['swift_store_auth_version'] = 2
+default['openstack']['image']['api']['swift_user_tenant'] = 'admin'
+default['openstack']['image']['api']['swift_store_user'] = 'admin'
+default['openstack']['image']['upload_images'] = []
 
 default['openstack']['compute']['driver'] = 'nova.virt.ironic.IronicDriver'
 default['openstack']['compute']['scheduler']['scheduler_host_manager'] = 'nova.scheduler.ironic_host_manager.IronicHostManager'
