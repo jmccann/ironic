@@ -21,11 +21,16 @@ ruby_block 'Get swift auth' do
     ENV['OS_AUTH_URL'] = auth_uri
 
     node.default['openstack']['bare-metal']['swift']['account'] = `swift stat | grep Account: | awk '{print $2}'`
+  end
+end
 
-    # # Dynamically set the file resource's attribute
-    # # Obtain the desired resource from resource_collection
-    # file_r = run_context.resource_collection.find(:file => "/tmp/some_file")
-    # # Update the content attribute
-    # file_r.content node[:test][:content]
+ruby_block 'Get cleaning network id' do
+  block do
+    ENV['OS_USERNAME'] = node['openstack']['identity']['admin_user']
+    ENV['OS_PASSWORD'] = 'password'
+    ENV['OS_TENANT_NAME'] = node['openstack']['identity']['admin_tenant_name']
+    ENV['OS_AUTH_URL'] = auth_uri
+
+    node.default['openstack']['bare-metal']['neutron']['cleaning_network_uuid'] = `neutron net-list | grep baremetal | awk '{print $2}'`
   end
 end
