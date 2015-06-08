@@ -24,6 +24,7 @@ include_recipe 'ironic::object-server'
 include_recipe 'openstack-object-storage::proxy-server'
 include_recipe 'openstack-object-storage::client'
 include_recipe 'openstack-object-storage::identity_registration'
+include_recipe 'ironic::swift_tempurl'
 
 include_recipe 'openstack-image::api'
 include_recipe 'openstack-image::registry'
