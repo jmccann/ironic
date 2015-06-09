@@ -1,39 +1,9 @@
 Ironic
 ======
 
+Using Stackforge to deploy an Ironic environment.
+
 # Attributes
-* `default['ironic']['agent']` (default: 'agent_vbox') - What ironic agent to use.
-Valid values include: `pxe_vbox` and `agent_vbox`
- * **Note**: agent_vbox will build a system but if set to net boot first will
- hang on deploy image after reboot.  THIS IS EXPECTED!  See note @ http://docs.openstack.org/developer/ironic/_modules/ironic/drivers/modules/virtualbox.html
-
-# Setup the stack
-
-## pxe_vbox
-```
-bundle exec kitchen conv
-bundle exec kitchen login
-sudo su - stack
-```
-
-Now wait about 30 min.
-
-You can login to the instance on another terminal window and watch it build:
-```
-bundle exec kitchen login
-sudo su - stack
-tail -f /opt/stack/devstack.log
-```
-
-
-## agent_vbox
-```
-bundle exec kitchen conv
-bundle exec kitchen login
-sudo su - stack
-cd devstack/stack.sh
-./finalize.sh
-```
 
 # Dashboard
 
@@ -62,51 +32,45 @@ On Host:
 ./baremetal_vm.sh
 ```
 
+# Run Chef
+```
+bexec kitchen conv
+```
+
 # Verify stuff
 
 ```
-source ~/devstack/openrc admin admin
+bexec kitchen login
+sudo su -
+. ~/openrc
 NODE_UUID=$(ironic node-list | egrep "my-baremetal"'[^-]' | awk '{ print $2 }')
 ironic node-show $NODE_UUID
 ironic node-validate $NODE_UUID
 ```
 
 # Boot an instance to the node
-Using pxe_vbox:
+
 ```
+bexec kitchen login
+sudo su -
+. ~/openrc
 source ~/devstack/openrc admin admin
-nova keypair-add default --pub-key ~/.ssh/id_rsa.pub
 NODE_UUID=$(ironic node-list | egrep "my-baremetal"'[^-]' | awk '{ print $2 }')
-image=$(nova image-list | egrep "cirros-.*-uec "'[^-]' | awk '{ print $2 }')
+image=$(nova image-list | egrep "cirros"'[^-]' | awk '{ print $2 }')
 
-ironic node-update $NODE_UUID add instance_info/root_gb=11
 ironic node-update $NODE_UUID add instance_info/image_source=$image
+ironic node-update $NODE_UUID add instance_info/root_gb=11
 
-net_id=$(neutron net-list | egrep "sharednet1"'[^-]' | awk '{ print $2 }')
+NODE_UUID=$(ironic node-list | egrep "my-baremetal"'[^-]' | awk '{ print $2 }')
+image=$(nova image-list | egrep "cirros"'[^-]' | awk '{ print $2 }')
+net_id=$(neutron net-list | egrep "baremetal"'[^-]' | awk '{ print $2 }')
+
 nova boot --flavor my-baremetal-flavor --nic net-id=$net_id --image $image --key-name default testing
-ironic node-list
+
+watch ironic node-list
 ```
 
-Using agent_vbox
-```
-source ~/devstack/openrc admin admin
-nova keypair-add default --pub-key ~/.ssh/id_rsa.pub
-NODE_UUID=$(ironic node-list | egrep "my-baremetal"'[^-]' | awk '{ print $2 }')
-image=$(nova image-list | egrep "cirros-.*-x86_64-disk"'[^-]' | awk '{ print $2 }')
-
-ironic node-update $NODE_UUID add instance_info/image_source=$image
-ironic node-update $NODE_UUID add instance_info/root_gb=11
-
-net_id=$(neutron net-list | egrep "sharednet1"'[^-]' | awk '{ print $2 }')
-nova boot --flavor my-baremetal-flavor --nic net-id=$net_id --image $image --key-name default testing --user-data /opt/stack/user_script.sh
-ironic node-list
-```
-
-Can take up to like 10 sec before VM will auto power-on.  Be patient.
-
-# Notes
-
-To get CentOS 7 to work can to move /etc/sysconfig/network-scripts/ifcfg-eth0 to /etc/sysconfig/network-scripts/ifcfg-enp0s3 and edit 'DEVICE' in the file to 'enp0s3'.
+Can take up to 5 min before VM will auto power-on.  Be patient.
 
 # Resources
 
