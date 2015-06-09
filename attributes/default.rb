@@ -8,7 +8,6 @@ default['openstack']['object-storage']['api']['auth']['delay_auth_decision'] = t
 
 default['openstack']['image']['api']['default_store'] = 'swift'
 default['openstack']['image']['api']['stores'] = ['file', 'http', 'swift']
-default['openstack']['image']['api']['swift_store_auth_address'] = 'http://10.0.2.15:5000/v2.0'
 default['openstack']['image']['api']['swift_store_auth_version'] = 2
 default['openstack']['image']['api']['swift_user_tenant'] = 'admin'
 default['openstack']['image']['api']['swift_store_user'] = 'admin'

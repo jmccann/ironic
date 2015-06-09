@@ -31,6 +31,8 @@ suites:
           debug: True
         image:
           debug: True
+          api:
+            swift_store_auth_address: http://10.0.2.15:5000/v2.0
         bare-metal:
           debug: True
           api_url: http://10.0.2.15:6385
