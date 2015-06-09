@@ -5,6 +5,8 @@ Using Stackforge to deploy an Ironic environment.
 
 # Attributes
 
+* `['ironic']['interfaces']` - Array of interface to bridge mappings for each network to build on.
+
 # Dashboard
 
 When it is done you can hit the dashboard @ http://localhost:8080/ admin:password

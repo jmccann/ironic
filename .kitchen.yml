@@ -23,6 +23,12 @@ suites:
       - recipe[openstack-object-storage::setup] # Bug?  Should search run_list including include_recipe?
       - recipe[fake::default]
     attributes:
+      ironic:
+        interfaces:
+          enp0s8:
+            name: 'br-bare'
+            ip: '192.168.50.1'
+            netmask: '255.255.255.0'
       openstack:
         endpoints:
           host: 10.0.2.15

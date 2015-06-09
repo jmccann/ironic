@@ -23,14 +23,6 @@ admin_user = node['openstack']['identity']['admin_user']
 admin_pass = get_password 'user', admin_user
 admin_tenant = node['openstack']['identity']['admin_tenant_name']
 
-execute 'ip link set enp0s8 up' do
-  not_if 'ip link show enp0s8 | grep UP'
-end
-
-execute 'ifconfig br-bare 192.168.50.1 netmask 255.255.255.0 up' do
-  not_if 'ip addr show br-bare | grep 192.168.50.1'
-end
-
 execute 'create baremetal net' do
     environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
                 'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
