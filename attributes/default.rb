@@ -38,10 +38,10 @@ default['openstack']['object-storage']['platform']['override_options'] = '--nogp
 default['openstack']['object-storage']['platform']['package_overrides'] = '--nogpgcheck' # bug of duplicate type options?
 
 # All new attributes I added
-default['openstack']['bare-metal']['swift']['temp_url_duration'] = ''
-default['openstack']['bare-metal']['swift']['container'] = ''
+default['openstack']['bare-metal']['swift']['temp_url_duration'] = '3600'
+default['openstack']['bare-metal']['swift']['container'] = 'glance'
 default['openstack']['bare-metal']['swift']['account'] = ''
-default['openstack']['bare-metal']['swift']['api_version'] = ''
+default['openstack']['bare-metal']['swift']['api_version'] = 'v1'
 default['openstack']['bare-metal']['swift']['endpoint_url'] = ''
 default['openstack']['bare-metal']['swift']['temp_url_key'] = ''
 default['openstack']['bare-metal']['neutron']['cleaning_network_uuid'] = ''
