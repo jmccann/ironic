@@ -25,7 +25,7 @@ admin_tenant = node['openstack']['identity']['admin_tenant_name']
 
 node['ironic']['interfaces'].each do |int, br|
   execute "ovs-vsctl add-br #{br['name']}" do
-    not_if "ovs-vsctl show | grep #{br}"
+    not_if "ovs-vsctl show | grep #{br['name']}"
   end
 
   execute "ovs-vsctl add-port #{br['name']} #{int}" do
