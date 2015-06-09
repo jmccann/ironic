@@ -19,7 +19,39 @@ Using Stackforge to deploy an Ironic environment.
 Credentials for services are stored using databags.  For Dev/CI we are using plaintext databags.
 For prod we use chef-vault.
 
-TODO: Get a list of vault/items required for this to work!
+## Databag Items Required
+
+See dev databags @ [test/integration/data_bags](test/integration/data_bags)
+
+* db_passwords
+  * ceilometer
+  * cinder
+  * dash
+  * glance
+  * heat
+  * horizon
+  * ironic
+  * keystone
+  * neutron
+  * nova
+* secrets
+  * neutron_metadata_secret
+  * openstack_identity_bootstrap_token
+  * swift_authkey
+  * swift_hash_path_prefix
+  * swift_hash_path_suffix
+* serivce_passwords
+  * admin
+  * openstack-bare-metal
+  * openstack-block-storage
+  * openstack-compute
+  * openstack-image
+  * openstack-network
+  * openstack-object-storage
+* user_passwords
+  * admin
+  * guest
+  * mysqlroot
 
 # Dashboard
 
