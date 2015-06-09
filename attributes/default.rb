@@ -4,9 +4,6 @@ default['openstack']['db']['service_type'] = 'mysql'
 
 default['openstack']['object-storage']['tempurl']['enabled'] = true
 
-default['openstack']['object-storage']['object_server_chef_role']     = 'test'
-default['openstack']['object-storage']['account_server_chef_role']    = 'test'
-default['openstack']['object-storage']['container_server_chef_role']  = 'test'
 default['openstack']['object-storage']['api']['auth']['delay_auth_decision'] = true
 
 default['openstack']['image']['api']['default_store'] = 'swift'
