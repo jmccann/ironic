@@ -26,6 +26,8 @@ default['openstack']['network']['ml2']['flat_networks'] = 'physbare'
 default['openstack']['network']['ml2']['network_vlan_ranges'] = 'physbare'
 default['openstack']['network']['openvswitch']['bridge_mappings'] = 'physbare:br-bare'
 
+default['openstack']['bare-metal']['tftp']['enabled'] = true
+
 # Think these are needed since we are using rdo-manager-release repo for openstack-ironic
 default['openstack']['compute']['platform']['package_overrides'] = '--nogpgcheck'
 default['openstack']['image']['platform']['package_overrides'] = '--nogpgcheck'
@@ -33,8 +35,7 @@ default['openstack']['identity']['platform']['package_options'] = '--nogpgcheck'
 default['openstack']['object-storage']['platform']['override_options'] = '--nogpgcheck' # bug of duplicate type options?
 default['openstack']['object-storage']['platform']['package_overrides'] = '--nogpgcheck' # bug of duplicate type options?
 
-default['openstack']['bare-metal']['tftp']['enabled'] = true
-default['openstack']['bare-metal']['enabled_drivers'] = 'pxe_ipmitool'
+# All new attributes I added
 default['openstack']['bare-metal']['swift']['temp_url_duration'] = ''
 default['openstack']['bare-metal']['swift']['container'] = ''
 default['openstack']['bare-metal']['swift']['account'] = ''
