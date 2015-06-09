@@ -23,16 +23,40 @@ admin_user = node['openstack']['identity']['admin_user']
 admin_pass = get_password 'user', admin_user
 admin_tenant = node['openstack']['identity']['admin_tenant_name']
 
-execute 'create baremetal net' do
+node['ironic']['interfaces'].each do |int, br|
+  execute "ovs-vsctl add-br #{br['name']}" do
+    not_if "ovs-vsctl show | grep #{br}"
+  end
+
+  execute "ovs-vsctl add-port #{br['name']} #{int}" do
+    not_if "ovs-vsctl show | grep #{int}"
+    notifies :run, 'execute[restart openvswitch agent]', :immediately
+  end
+
+  execute "ip link set #{int} up" do
+    not_if "ip link show #{int} | grep UP"
+  end
+
+  execute "ifconfig #{br['name']} #{br['ip']}/#{br['mask']} up" do
+    not_if "ip addr show #{br['name']} | grep #{br['ip']}"
+  end
+
+  execute 'restart openvswitch agent' do
+    command 'systemctl restart neutron-openvswitch-agent.service'
+    action :nothing
+  end
+
+  execute "create #{br['net_name']} net" do
     environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
                 'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
-  command 'neutron net-create baremetal --shared --provider:network_type flat --provider:physical_network physbare'
-  not_if 'neutron net-list -F name | egrep "\|[ ]+baremetal[ ]+\|"'
-end
+    command "neutron net-create #{br['net_name']} --shared --provider:network_type flat --provider:physical_network #{br['map_name']}"
+    not_if "neutron net-list -F name | egrep \"\\|[ ]+#{br['net_name']}[ ]+\\|\""
+  end
 
-execute 'create baremetal subnet' do
-  environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
-              'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
-  command 'neutron subnet-create baremetal 192.168.50.0/24 --name baremetal-subnet --ip-version=4 --gateway=192.168.50.1 --allocation-pool start=192.168.50.100,end=192.168.50.200 --enable-dhcp'
-  not_if 'neutron subnet-list -F name | egrep "\|[ ]+baremetal-subnet[ ]+\|"'
+  execute "create #{br['net_name']} subnet" do
+    environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
+                'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
+    command "neutron subnet-create #{br['net_name']} #{br['network']}/#{br['mask']} --name #{br['net_name']}-subnet --ip-version=4 --gateway=#{br['ip']} --allocation-pool start=#{br['allocation_start']},end=#{br['allocation_end']} --enable-dhcp" # rubocop:disable LineLength
+    not_if "neutron subnet-list -F name | egrep \"\\|[ ]+#{br['net_name']}-subnet[ ]+\\|\""
+  end
 end

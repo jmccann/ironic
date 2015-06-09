@@ -37,7 +37,6 @@ include_recipe 'openstack-network::server'
 include_recipe 'openstack-network::dhcp_agent'
 # include_recipe 'openstack-network::l3_agent'
 include_recipe 'openstack-network::identity_registration'
-include_recipe 'ironic::create_bridge'
 include_recipe 'ironic::populate_neutron'
 
 # Hacky hack to get ironic-conductor to install

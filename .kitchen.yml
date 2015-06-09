@@ -26,9 +26,14 @@ suites:
       ironic:
         interfaces:
           enp0s8:
-            name: 'br-bare'
-            ip: '192.168.50.1'
-            netmask: '255.255.255.0'
+            name: br-bare
+            map_name: physbare
+            net_name: baremetal
+            ip: 192.168.50.1
+            network: 192.168.50.0
+            mask: 24
+            allocation_start: 192.168.50.100
+            allocation_end: 192.168.50.200
       openstack:
         endpoints:
           host: 10.0.2.15
