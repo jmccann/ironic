@@ -30,7 +30,7 @@ include_recipe 'openstack-image::api'
 include_recipe 'openstack-image::registry'
 include_recipe 'openstack-image::identity_registration'
 include_recipe 'openstack-image::image_upload'
-include_recipe 'ironic::deploy_agent'
+include_recipe 'ironic::populate_glance'
 
 include_recipe 'openstack-network::openvswitch'
 include_recipe 'openstack-network::server'
