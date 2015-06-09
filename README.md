@@ -5,7 +5,21 @@ Using Stackforge to deploy an Ironic environment.
 
 # Attributes
 
-* `['ironic']['interfaces']` - Array of interface to bridge mappings for each network to build on.
+* `['ironic']['interfaces']` (default: []) - Array of interface to bridge mappings for each network to build on.
+* `['openstack']['databag_type']` (default: 'vault') - Set databag type acceptable values
+  'encrypted', 'standard', 'vault' Set this to 'standard' in order to use regular databags.
+  this is not recommended for anything other than dev/CI
+  type environments.  Storing real secrets in plaintext = craycray.
+  In addition to the encrypted data_bags which are an included
+  feature of the official chef project, you can use 'vault' to
+  encrypt your secrets with the method provided in the chef-vault gem.
+
+# Credentials
+
+Credentials for services are stored using databags.  For Dev/CI we are using plaintext databags.
+For prod we use chef-vault.
+
+TODO: Get a list of vault/items required for this to work!
 
 # Dashboard
 

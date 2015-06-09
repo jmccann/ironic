@@ -36,6 +36,7 @@ suites:
             allocation_start: 192.168.50.100
             allocation_end: 192.168.50.200
       openstack:
+        databag_type: standard
         endpoints:
           host: 10.0.2.15
           bind-host: 10.0.2.15

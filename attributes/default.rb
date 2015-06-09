@@ -1,7 +1,7 @@
 default['ironic']['interfaces'] = []
 
 default['openstack']['yum']['uri'] = 'http://repos.fedorapeople.org/repos/openstack/openstack-kilo/el7'
-default['openstack']['databag_type'] = 'standard'
+default['openstack']['databag_type'] = 'vault'
 default['openstack']['db']['service_type'] = 'mysql'
 
 default['openstack']['object-storage']['tempurl']['enabled'] = true
