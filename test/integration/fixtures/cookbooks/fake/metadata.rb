@@ -5,3 +5,6 @@ license          'Apache 2.0'
 description      'A cookbook for deploying Hanlon'
 long_description 'A cookbook for deploying Hanlon'
 version          '0.1.0'
+
+depends 'yum'
+depends 'yum-epel'

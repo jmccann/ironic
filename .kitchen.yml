@@ -19,6 +19,7 @@ platforms:
 suites:
   - name: default
     run_list:
+      - recipe[fake::vbox_driver_prereq]
       - recipe[ironic::default]
       - recipe[openstack-object-storage::setup] # Bug?  Should search run_list including include_recipe?
       - recipe[fake::default]
@@ -49,7 +50,7 @@ suites:
           api_url: http://10.0.2.15:6385
           tftp:
             server: 10.0.2.15
-          enabled_drivers: 'fake,pxe_ssh,pxe_ipmitool,pxe_vbox,agent_vbox,agent_ssh,agent_ipmitool'
+          enabled_drivers: fake,pxe_ssh,pxe_ipmitool,pxe_vbox,agent_vbox,agent_ssh,agent_ipmitool
           swift:
             temp_url_duration: 3600
             container: glance

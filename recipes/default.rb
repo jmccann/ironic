@@ -40,7 +40,6 @@ include_recipe 'ironic::populate_neutron'
 
 # Hacky hack to get ironic-conductor to install
 include_recipe 'ironic::conductor'
-include_recipe 'ironic::vbox_driver_prereq'
 include_recipe 'ironic::tftp'
 
 include_recipe 'ironic::ironic_overrides'
