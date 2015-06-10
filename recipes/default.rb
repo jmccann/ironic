@@ -1,4 +1,5 @@
 include_recipe 'yum::default'
+include_recipe 'chef-vault'
 package 'deltarpm'
 
 include_recipe 'openstack-common::default'

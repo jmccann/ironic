@@ -16,14 +16,14 @@ Using Stackforge to deploy a standalone Ironic environment.
 
 # Credentials
 
-Credentials for services are stored using databags.  For Dev/CI we are using plaintext databags.
-For prod we use chef-vault.
+Credentials for services are stored using databags.  We are using chef-vault.
+For Dev/CI we are using 'simulated' chef-vaults.
 
 ## Databag Items Required
 
 See dev databags @ [test/integration/data_bags](test/integration/data_bags)
 
-* db_passwords
+* vault_db_passwords
   * ceilometer
   * cinder
   * dash
@@ -34,13 +34,13 @@ See dev databags @ [test/integration/data_bags](test/integration/data_bags)
   * keystone
   * neutron
   * nova
-* secrets
+* vault_secrets
   * neutron_metadata_secret
   * openstack_identity_bootstrap_token
   * swift_authkey
   * swift_hash_path_prefix
   * swift_hash_path_suffix
-* serivce_passwords
+* vault_serivce_passwords
   * admin
   * openstack-bare-metal
   * openstack-block-storage
@@ -48,7 +48,7 @@ See dev databags @ [test/integration/data_bags](test/integration/data_bags)
   * openstack-image
   * openstack-network
   * openstack-object-storage
-* user_passwords
+* vault_user_passwords
   * admin
   * guest
   * mysqlroot
@@ -101,17 +101,14 @@ ironic node-validate $NODE_UUID
 ```
 bexec kitchen login
 sudo su -
+
 . ~/openrc
-source ~/devstack/openrc admin admin
-NODE_UUID=$(ironic node-list | egrep "my-baremetal"'[^-]' | awk '{ print $2 }')
-image=$(nova image-list | egrep "cirros"'[^-]' | awk '{ print $2 }')
-
-ironic node-update $NODE_UUID add instance_info/image_source=$image
-ironic node-update $NODE_UUID add instance_info/root_gb=11
-
 NODE_UUID=$(ironic node-list | egrep "my-baremetal"'[^-]' | awk '{ print $2 }')
 image=$(nova image-list | egrep "cirros"'[^-]' | awk '{ print $2 }')
 net_id=$(neutron net-list | egrep "baremetal"'[^-]' | awk '{ print $2 }')
+
+ironic node-update $NODE_UUID add instance_info/image_source=$image
+ironic node-update $NODE_UUID add instance_info/root_gb=11
 
 nova boot --flavor my-baremetal-flavor --nic net-id=$net_id --image $image --key-name default testing
 
