@@ -1,7 +1,7 @@
 Ironic
 ======
 
-Using Stackforge to deploy an Ironic environment.
+Using Stackforge to deploy a standalone Ironic environment.
 
 # Attributes
 
