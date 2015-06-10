@@ -41,7 +41,7 @@ See dev databags @ [test/integration/data_bags](test/integration/data_bags)
   * swift_hash_path_prefix
   * swift_hash_path_suffix
 * vault_serivce_passwords
-  * admin
+  * admin - should match value in vault_user_passwords:admin
   * openstack-bare-metal
   * openstack-block-storage
   * openstack-compute

@@ -15,9 +15,9 @@ admin_tenant = node['openstack']['identity']['admin_tenant_name']
 
 ruby_block 'Get swift auth' do
   block do
-    ENV['OS_USERNAME'] = node['openstack']['identity']['admin_user']
-    ENV['OS_PASSWORD'] = 'password'
-    ENV['OS_TENANT_NAME'] = node['openstack']['identity']['admin_tenant_name']
+    ENV['OS_USERNAME'] = admin_user
+    ENV['OS_PASSWORD'] = admin_pass
+    ENV['OS_TENANT_NAME'] = admin_tenant
     ENV['OS_AUTH_URL'] = auth_uri
 
     node.default['openstack']['bare-metal']['swift']['account'] = `swift stat | grep Account: | awk '{print $2}'`
@@ -26,9 +26,9 @@ end
 
 ruby_block 'Get cleaning network id' do
   block do
-    ENV['OS_USERNAME'] = node['openstack']['identity']['admin_user']
-    ENV['OS_PASSWORD'] = 'password'
-    ENV['OS_TENANT_NAME'] = node['openstack']['identity']['admin_tenant_name']
+    ENV['OS_USERNAME'] = admin_user
+    ENV['OS_PASSWORD'] = admin_pass
+    ENV['OS_TENANT_NAME'] = admin_tenant
     ENV['OS_AUTH_URL'] = auth_uri
 
     node.default['openstack']['bare-metal']['neutron']['cleaning_network_uuid'] = `neutron net-list | grep baremetal | awk '{print $2}'`
