@@ -53,4 +53,3 @@ suites:
           enabled_drivers: fake,pxe_ssh,pxe_ipmitool,pxe_vbox,agent_vbox,agent_ssh,agent_ipmitool
           swift:
             endpoint_url: http://10.0.2.15:8080
-            temp_url_key: 9NDaxGTfwRpHrL7j

@@ -683,8 +683,8 @@ connection=<%= @db_connection %>
 # The secret token given to Swift to allow temporary URL
 # downloads. Required for temporary URLs. (string value)
 #swift_temp_url_key=<None>
-<% unless node['openstack']['bare-metal']['swift']['temp_url_key'].to_s.empty? %>
-swift_temp_url_key = <%= node['openstack']['bare-metal']['swift']['temp_url_key'].to_s %>
+<% unless @swift_key.nil? %>
+swift_temp_url_key = <%= @swift_key %>
 <% end %>
 
 # The length of time in seconds that the temporary URL will be

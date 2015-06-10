@@ -43,12 +43,10 @@ include_recipe 'ironic::populate_neutron'
 include_recipe 'ironic::conductor'
 include_recipe 'ironic::tftp'
 
-include_recipe 'ironic::ironic_overrides'
+include_recipe 'ironic::prep_ironic'
 include_recipe 'openstack-bare-metal::conductor'
 include_recipe 'openstack-bare-metal::api'
-# Contribute attributizing: enabled-drivers, swift
-r = resources('template[/etc/ironic/ironic.conf]')
-r.cookbook 'ironic'
+include_recipe 'ironic::overrides'
 include_recipe 'openstack-bare-metal::identity_registration'
 
 include_recipe 'openstack-compute::nova-setup'
