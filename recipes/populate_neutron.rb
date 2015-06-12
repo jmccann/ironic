@@ -57,13 +57,27 @@ node['ironic']['interfaces'].each do |int, br|
     environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
                 'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
     command "neutron net-create #{br['net_name']} --shared --provider:network_type flat --provider:physical_network #{br['map_name']}"
-    not_if "neutron net-list -F name | egrep \"\\|[ ]+#{br['net_name']}[ ]+\\|\""
+    not_if <<-EOF
+      export OS_USERNAME=#{admin_user}
+      export OS_PASSWORD=#{admin_pass}
+      export OS_TENANT_NAME=#{admin_tenant}
+      export OS_AUTH_URL=#{auth_uri}
+
+      neutron net-list -F name | egrep \"\\|[ ]+#{br['net_name']}[ ]+\\|\"
+    EOF
   end
 
   execute "create #{br['net_name']} subnet" do
     environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
                 'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
     command "neutron subnet-create #{br['net_name']} #{br['network']}/#{br['mask']} --name #{br['net_name']}-subnet --ip-version=4 --gateway=#{br['ip']} --allocation-pool start=#{br['allocation_start']},end=#{br['allocation_end']} --enable-dhcp" # rubocop:disable LineLength
-    not_if "neutron subnet-list -F name | egrep \"\\|[ ]+#{br['net_name']}-subnet[ ]+\\|\""
+    not_if <<-EOF
+      export OS_USERNAME=#{admin_user}
+      export OS_PASSWORD=#{admin_pass}
+      export OS_TENANT_NAME=#{admin_tenant}
+      export OS_AUTH_URL=#{auth_uri}
+
+      neutron subnet-list -F name | egrep \"\\|[ ]+#{br['net_name']}-subnet[ ]+\\|\"
+    EOF
   end
 end

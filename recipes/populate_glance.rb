@@ -31,18 +31,39 @@ end
 execute 'glance image-create --name cirros --disk-format qcow2 --container-format bare < /var/tmp/cirros-0.3.2-x86_64-disk.img' do
   environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
               'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
-  not_if 'glance image-list | egrep "\|[ ]+cirros[ ]+\|"'
+  not_if <<-EOF
+    export OS_USERNAME=#{admin_user}
+    export OS_PASSWORD=#{admin_pass}
+    export OS_TENANT_NAME=#{admin_tenant}
+    export OS_AUTH_URL=#{auth_uri}
+
+    glance image-list | egrep "\|[ ]+cirros[ ]+\|"
+  EOF
 end
 
 # Can't use openstack_image_image due to poor ami support and lack of direct aki/ari support
 execute 'glance image-create --name ir-deploy-agent.kernel --disk-format aki --container-format aki < /var/tmp/coreos_production_pxe.vmlinuz' do
   environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
               'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
-  not_if 'glance image-list | egrep "\|[ ]+ir-deploy-agent.kernel[ ]+\|"'
+  not_if <<-EOF
+    export OS_USERNAME=#{admin_user}
+    export OS_PASSWORD=#{admin_pass}
+    export OS_TENANT_NAME=#{admin_tenant}
+    export OS_AUTH_URL=#{auth_uri}
+
+    glance image-list | egrep "\|[ ]+ir-deploy-agent.kernel[ ]+\|"
+  EOF
 end
 
 execute 'glance image-create --name ir-deploy-agent.initramfs --disk-format ari --container-format ari < /var/tmp/coreos_production_pxe_image-oem.cpio.gz' do
   environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
               'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
-  not_if 'glance image-list | egrep "\|[ ]+ir-deploy-agent.initramfs[ ]+\|"'
+  not_if <<-EOF
+    export OS_USERNAME=#{admin_user}
+    export OS_PASSWORD=#{admin_pass}
+    export OS_TENANT_NAME=#{admin_tenant}
+    export OS_AUTH_URL=#{auth_uri}
+
+    glance image-list | egrep "\|[ ]+ir-deploy-agent.initramfs[ ]+\|"
+  EOF
 end
