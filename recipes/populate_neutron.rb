@@ -26,6 +26,7 @@ admin_tenant = node['openstack']['identity']['admin_tenant_name']
 node['ironic']['interfaces'].each do |int, br|
   execute "remove IP from #{int}" do
     command "ip addr del $(ip a show #{int} | grep ' #{br['ip']}/' | awk '{print $2}') dev #{int}"
+    only_if { br.key?('ip') && br.key?('mask') }
     only_if "ip a show #{int} | grep ' #{br['ip']}/'"
   end
 
