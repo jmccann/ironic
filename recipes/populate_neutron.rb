@@ -24,6 +24,11 @@ admin_pass = get_password 'user', admin_user
 admin_tenant = node['openstack']['identity']['admin_tenant_name']
 
 node['ironic']['interfaces'].each do |int, br|
+  execute "remove IP from #{int}" do
+    command "ip addr del $(ip a show #{int} | grep ' #{br['ip']}/' | awk '{print $2}') dev #{int}"
+    only_if "ip a show #{int} | grep ' #{br['ip']}/'"
+  end
+
   execute "ovs-vsctl add-br #{br['name']}" do
     not_if "ovs-vsctl show | grep #{br['name']}"
   end
@@ -38,6 +43,7 @@ node['ironic']['interfaces'].each do |int, br|
   end
 
   execute "ifconfig #{br['name']} #{br['ip']}/#{br['mask']} up" do
+    only_if { br.key?('ip') && br.key?('mask') }
     not_if "ip addr show #{br['name']} | grep #{br['ip']}"
   end
 
