@@ -1,3 +1,7 @@
+1.1.1
+-----
+* Add guard to removing IP from phys int
+
 1.1.0
 -----
 * Ability to use physical address on bridge interface
