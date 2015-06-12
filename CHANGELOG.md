@@ -1,3 +1,7 @@
+1.1.2
+-----
+* Add ENV to guards to support Chef 11
+
 1.1.1
 -----
 * Add guard to removing IP from phys int
