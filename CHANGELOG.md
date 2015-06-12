@@ -1,3 +1,7 @@
+1.1.0
+-----
+* Ability to use physical address on bridge interface
+
 1.0.3
 -----
 * Remove requirement for tempurl key in node attribute
