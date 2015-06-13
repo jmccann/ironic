@@ -37,7 +37,7 @@ execute 'glance image-create --name cirros --disk-format qcow2 --container-forma
     export OS_TENANT_NAME=#{admin_tenant}
     export OS_AUTH_URL=#{auth_uri}
 
-    glance image-list | egrep "\|[ ]+cirros[ ]+\|"
+    glance image-list | egrep \"\\|[ ]+cirros[ ]+\\|\"
   EOF
 end
 
@@ -51,7 +51,7 @@ execute 'glance image-create --name ir-deploy-agent.kernel --disk-format aki --c
     export OS_TENANT_NAME=#{admin_tenant}
     export OS_AUTH_URL=#{auth_uri}
 
-    glance image-list | egrep "\|[ ]+ir-deploy-agent.kernel[ ]+\|"
+    glance image-list | egrep \"\\|[ ]+ir-deploy-agent.kernel[ ]+\\|\"
   EOF
 end
 
@@ -64,6 +64,6 @@ execute 'glance image-create --name ir-deploy-agent.initramfs --disk-format ari 
     export OS_TENANT_NAME=#{admin_tenant}
     export OS_AUTH_URL=#{auth_uri}
 
-    glance image-list | egrep "\|[ ]+ir-deploy-agent.initramfs[ ]+\|"
+    glance image-list | egrep \"\\|[ ]+ir-deploy-agent.initramfs[ ]+\\|\"
   EOF
 end
