@@ -1,3 +1,7 @@
+1.1.3
+-----
+* Fix guards for glance image upload
+
 1.1.2
 -----
 * Add ENV to guards to support Chef 11
