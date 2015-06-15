@@ -1,3 +1,8 @@
+2.0.0
+-----
+* Allow defining multiple networks per managed interface
+ * Includes reworking of some attributes
+
 1.1.3
 -----
 * Fix guards for glance image upload
