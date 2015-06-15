@@ -23,61 +23,67 @@ admin_user = node['openstack']['identity']['admin_user']
 admin_pass = get_password 'user', admin_user
 admin_tenant = node['openstack']['identity']['admin_tenant_name']
 
-node['ironic']['interfaces'].each do |int, br|
-  execute "remove IP from #{int}" do
-    command "ip addr del $(ip a show #{int} | grep ' #{br['ip']}/' | awk '{print $2}') dev #{int}"
-    only_if { br.key?('ip') && br.key?('mask') }
-    only_if "ip a show #{int} | grep ' #{br['ip']}/'"
+node['ironic']['bridges'].each do |br, data|
+  execute "remove IP from #{data['interface']}" do
+    command "ip addr del $(ip a show #{data['interface']} | grep ' #{data['ip']}/' | awk '{print $2}') dev #{data['interface']}"
+    only_if { data.key?('ip') && data.key?('mask') }
+    only_if "ip a show #{data['interface']} | grep ' #{data['ip']}/'"
   end
 
-  execute "ovs-vsctl add-br #{br['name']}" do
-    not_if "ovs-vsctl show | grep #{br['name']}"
+  execute "Add bridge #{br}" do
+    command "ovs-vsctl add-br #{br}"
+    not_if "ovs-vsctl show | grep #{br}"
   end
 
-  execute "ovs-vsctl add-port #{br['name']} #{int}" do
-    not_if "ovs-vsctl show | grep #{int}"
+  execute "Adds interface #{data['interface']} as port to #{br}" do
+    command "ovs-vsctl add-port #{br} #{data['interface']}"
+    not_if "ovs-vsctl show | grep #{data['interface']}"
     notifies :run, 'execute[restart openvswitch agent]', :immediately
   end
 
-  execute "ip link set #{int} up" do
-    not_if "ip link show #{int} | grep UP"
+  execute "Sets #{data['interface']} link UP" do
+    command "ip link set #{data['interface']} up"
+    not_if "ip link show #{data['interface']} | grep UP"
   end
 
-  execute "ifconfig #{br['name']} #{br['ip']}/#{br['mask']} up" do
-    only_if { br.key?('ip') && br.key?('mask') }
-    not_if "ip addr show #{br['name']} | grep #{br['ip']}"
+  execute "Sets IP config for #{br}" do
+    command "ifconfig #{br} #{data['ip']}/#{data['mask']} up"
+    only_if { data.key?('ip') && data.key?('mask') }
+    not_if "ip addr show #{br} | grep #{data['ip']}"
   end
 
   execute 'restart openvswitch agent' do
     command 'systemctl restart neutron-openvswitch-agent.service'
     action :nothing
   end
+end
 
-  execute "create #{br['net_name']} net" do
+node['ironic']['networks'].each do |net, data|
+  execute "create #{net} net" do
     environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
                 'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
-    command "neutron net-create #{br['net_name']} --shared --provider:network_type flat --provider:physical_network #{br['map_name']}"
+    command "neutron net-create #{net} --shared --provider:network_type flat --provider:physical_network #{data['phys_net']}"
     not_if <<-EOF
       export OS_USERNAME=#{admin_user}
       export OS_PASSWORD=#{admin_pass}
       export OS_TENANT_NAME=#{admin_tenant}
       export OS_AUTH_URL=#{auth_uri}
 
-      neutron net-list -F name | egrep \"\\|[ ]+#{br['net_name']}[ ]+\\|\"
+      neutron net-list -F name | egrep \"\\|[ ]+#{net}[ ]+\\|\"
     EOF
   end
 
-  execute "create #{br['net_name']} subnet" do
+  execute "create #{net} subnet" do
     environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
                 'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
-    command "neutron subnet-create #{br['net_name']} #{br['network']}/#{br['mask']} --name #{br['net_name']}-subnet --ip-version=4 --gateway=#{br['ip']} --allocation-pool start=#{br['allocation_start']},end=#{br['allocation_end']} --enable-dhcp" # rubocop:disable LineLength
+    command "neutron subnet-create #{net} #{data['network']}/#{data['mask']} --name #{net}-subnet --ip-version=4 --gateway=#{data['ip']} --allocation-pool start=#{data['allocation_start']},end=#{data['allocation_end']} --enable-dhcp" # rubocop:disable LineLength
     not_if <<-EOF
       export OS_USERNAME=#{admin_user}
       export OS_PASSWORD=#{admin_pass}
       export OS_TENANT_NAME=#{admin_tenant}
       export OS_AUTH_URL=#{auth_uri}
 
-      neutron subnet-list -F name | egrep \"\\|[ ]+#{br['net_name']}-subnet[ ]+\\|\"
+      neutron subnet-list -F name | egrep \"\\|[ ]+#{net}-subnet[ ]+\\|\"
     EOF
   end
 end

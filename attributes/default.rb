@@ -23,9 +23,9 @@ default['openstack']['compute']['network']['service_type'] = 'neutron'
 
 default['openstack']['network']['dhcp']['dnsmasq_rpm_version'] = ''
 default['openstack']['network']['ml2']['tenant_network_types'] = 'flat'
-default['openstack']['network']['ml2']['flat_networks'] = node['ironic']['interfaces'].map { |_i, b| b['map_name'] }.join(',')
-default['openstack']['network']['ml2']['network_vlan_ranges'] = node['ironic']['interfaces'].map { |_i, b| b['map_name'] }.join(',')
-default['openstack']['network']['openvswitch']['bridge_mappings'] = node['ironic']['interfaces'].map { |_i, b| "#{b['map_name']}:#{b['name']}" }.join(',')
+default['openstack']['network']['ml2']['flat_networks'] = node['ironic']['interfaces'].map { |_i, b| b['phys_net'] }.join(',')
+default['openstack']['network']['ml2']['network_vlan_ranges'] = node['ironic']['interfaces'].map { |_i, b| b['phys_net'] }.join(',')
+default['openstack']['network']['openvswitch']['bridge_mappings'] = node['ironic']['interfaces'].map { |_i, b| "#{b['phys_net']}:#{b['name']}" }.join(',')
 
 default['openstack']['bare-metal']['enabled_drivers']['enabled'] = 'agent_ssh,agent_ipmitool'
 default['openstack']['bare-metal']['tftp']['enabled'] = true
