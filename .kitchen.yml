@@ -58,7 +58,8 @@ suites:
             endpoint_url: http://10.0.2.15:8080
 
   - name: default-chef11
-    require_chef_omnibus: 11.16.4
+    provisioner:
+      require_chef_omnibus: 11.16.4
     run_list:
       - recipe[fake::vbox_driver_prereq]
       - recipe[ironic::default]
