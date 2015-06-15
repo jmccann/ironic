@@ -1,4 +1,5 @@
-default['ironic']['interfaces'] = []
+default['ironic']['bridges'] = []
+default['ironic']['networks'] = []
 
 default['openstack']['yum']['uri'] = 'http://repos.fedorapeople.org/repos/openstack/openstack-kilo/el7'
 default['openstack']['databag_type'] = 'vault'
@@ -23,9 +24,9 @@ default['openstack']['compute']['network']['service_type'] = 'neutron'
 
 default['openstack']['network']['dhcp']['dnsmasq_rpm_version'] = ''
 default['openstack']['network']['ml2']['tenant_network_types'] = 'flat'
-default['openstack']['network']['ml2']['flat_networks'] = node['ironic']['interfaces'].map { |_i, b| b['phys_net'] }.join(',')
-default['openstack']['network']['ml2']['network_vlan_ranges'] = node['ironic']['interfaces'].map { |_i, b| b['phys_net'] }.join(',')
-default['openstack']['network']['openvswitch']['bridge_mappings'] = node['ironic']['interfaces'].map { |_i, b| "#{b['phys_net']}:#{b['name']}" }.join(',')
+default['openstack']['network']['ml2']['flat_networks'] = node['ironic']['bridges'].map { |_i, b| b['phys_net'] }.join(',')
+default['openstack']['network']['ml2']['network_vlan_ranges'] = node['ironic']['bridges'].map { |_i, b| b['phys_net'] }.join(',')
+default['openstack']['network']['openvswitch']['bridge_mappings'] = node['ironic']['bridges'].map { |_i, b| "#{b['phys_net']}:#{b['name']}" }.join(',')
 
 default['openstack']['bare-metal']['enabled_drivers']['enabled'] = 'agent_ssh,agent_ipmitool'
 default['openstack']['bare-metal']['tftp']['enabled'] = true

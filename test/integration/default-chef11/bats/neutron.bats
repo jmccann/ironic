@@ -7,6 +7,22 @@ export OS_AUTH_URL=http://10.0.2.15:5000/v2.0
 export OS_REGION_NAME=RegionOne
 export OS_VOLUME_API_VERSION=2
 
+@test 'bridge br-bare created' {
+  ovs-vsctl show | grep br-bare
+}
+
+@test 'bridge br-bare associated with enp0s8' {
+  ovs-vsctl show | grep enp0s8
+}
+
+@test 'enp0s8 is link UP' {
+  ip link show enp0s8 | grep UP
+}
+
+@test 'Bridge br-bare has IP configured' {
+  ip addr show br-bare | grep 192.168.50.1
+}
+
 @test 'baremetal net created' {
   neutron net-show baremetal
 }
