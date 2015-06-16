@@ -7,6 +7,10 @@ export OS_AUTH_URL=http://10.0.2.15:5000/v2.0
 export OS_REGION_NAME=RegionOne
 export OS_VOLUME_API_VERSION=2
 
+@test 'creates network mapping between br-bare and physbare' {
+  grep "physbare:br-bare" /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini
+}
+
 @test 'bridge br-bare created' {
   ovs-vsctl show | grep br-bare
 }
