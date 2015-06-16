@@ -1,3 +1,7 @@
+2.0.2
+-----
+* Install ipmitool package
+
 2.0.1
 -----
 * Fix OVS bridge mapping config bug
