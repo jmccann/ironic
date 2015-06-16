@@ -1,3 +1,7 @@
+2.0.3
+-----
+* Fix bug in setting invalid enabled_drivers for Ironic
+
 2.0.2
 -----
 * Install ipmitool package
