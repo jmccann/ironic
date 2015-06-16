@@ -28,7 +28,7 @@ default['openstack']['network']['ml2']['flat_networks'] = node['ironic']['bridge
 default['openstack']['network']['ml2']['network_vlan_ranges'] = node['ironic']['bridges'].map { |_i, b| b['phys_net'] }.join(',')
 default['openstack']['network']['openvswitch']['bridge_mappings'] = node['ironic']['bridges'].map { |i, b| "#{b['phys_net']}:#{i}" }.join(',')
 
-default['openstack']['bare-metal']['enabled_drivers']['enabled'] = 'agent_ssh,agent_ipmitool'
+default['openstack']['bare-metal']['enabled_drivers'] = 'agent_ssh,agent_ipmitool'
 default['openstack']['bare-metal']['tftp']['enabled'] = true
 
 # Think these are needed since we are using rdo-manager-release repo for openstack-ironic
