@@ -34,3 +34,5 @@ ruby_block 'Get cleaning network id' do
     node.default['openstack']['bare-metal']['neutron']['cleaning_network_uuid'] = `neutron net-list | grep baremetal | awk '{print $2}'`
   end
 end
+
+package 'ipmitool'
