@@ -1,3 +1,7 @@
+2.0.1
+-----
+* Fix OVS bridge mapping config bug
+
 2.0.0
 -----
 * Allow defining multiple networks per managed interface
