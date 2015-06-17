@@ -1,3 +1,7 @@
+2.2.0
+-----
+* Ability to set gateway on defined neutron subnet
+
 2.1.0
 -----
 * Ability to set default gw when assigning primary IP to a bridge interface
