@@ -14,7 +14,7 @@ platforms:
       network:
         - ["forwarded_port", {guest: 443, host: 9443, auto_correct: true}]
         - ["forwarded_port", {guest: 80, host: 8080, auto_correct: true}]
-        - ["private_network", {ip: 192.168.50.1, virtualbox__intnet: true}]
+        - ["private_network", {type: dhcp, auto_config: false, virtualbox__intnet: true}]
 
 suites:
   - name: default
@@ -25,11 +25,17 @@ suites:
       - recipe[fake::default]
     attributes:
       ironic:
+        gateway: 10.0.2.2
         bridges:
           br-bare:
             interface: enp0s8
             phys_net: physbare
             ip: 192.168.50.1
+            mask: 24
+          br-gate:
+            interface: enp0s3
+            phys_net: physgate
+            ip: 10.0.2.15
             mask: 24
         networks:
           baremetal:
@@ -56,6 +62,8 @@ suites:
           enabled_drivers: fake,pxe_ssh,pxe_ipmitool,pxe_vbox,agent_vbox,agent_ssh,agent_ipmitool
           swift:
             endpoint_url: http://10.0.2.15:8080
+      rabbitmq:
+        use_distro_version: true
 
   - name: default-chef11
     provisioner:
@@ -67,11 +75,17 @@ suites:
       - recipe[fake::default]
     attributes:
       ironic:
+        gateway: 10.0.2.2
         bridges:
           br-bare:
             interface: enp0s8
             phys_net: physbare
             ip: 192.168.50.1
+            mask: 24
+          br-gate:
+            interface: enp0s3
+            phys_net: physgate
+            ip: 10.0.2.15
             mask: 24
         networks:
           baremetal:
@@ -98,3 +112,5 @@ suites:
           enabled_drivers: fake,pxe_ssh,pxe_ipmitool,pxe_vbox,agent_vbox,agent_ssh,agent_ipmitool
           swift:
             endpoint_url: http://10.0.2.15:8080
+      rabbitmq:
+        use_distro_version: true

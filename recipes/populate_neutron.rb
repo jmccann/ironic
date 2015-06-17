@@ -1,13 +1,3 @@
-# execute 'create private net' do
-#   command 'source ~/openrc && neutron net-create private'
-#   not_if 'source ~/openrc && neutron net-list -F name | egrep "\|[ ]+private[ ]+\|"'
-# end
-#
-# execute 'create private subnet' do
-#   command 'source ~/openrc && neutron subnet-create --name private-subnet private 10.1.0.0/24'
-#   not_if 'source ~/openrc && neutron subnet-list -F name | egrep "\|[ ]+private-subnet[ ]+\|"'
-# end
-
 class ::Chef::Recipe # rubocop:disable Documentation
   include ::Openstack
 end
@@ -23,16 +13,14 @@ admin_user = node['openstack']['identity']['admin_user']
 admin_pass = get_password 'user', admin_user
 admin_tenant = node['openstack']['identity']['admin_tenant_name']
 
-node['ironic']['bridges'].each do |br, data|
-  execute "remove IP from #{data['interface']}" do
-    command "ip addr del $(ip a show #{data['interface']} | grep ' #{data['ip']}/' | awk '{print $2}') dev #{data['interface']}"
-    only_if { data.key?('ip') && data.key?('mask') }
-    only_if "ip a show #{data['interface']} | grep ' #{data['ip']}/'"
-  end
+service 'NetworkManager' do
+  action [:disable, :stop]
+end
 
+node['ironic']['bridges'].each do |br, data|
   execute "Add bridge #{br}" do
     command "ovs-vsctl add-br #{br}"
-    not_if "ovs-vsctl show | grep #{br}"
+    not_if "ovs-vsctl show | grep 'Bridge #{br}'"
   end
 
   execute "Adds interface #{data['interface']} as port to #{br}" do
@@ -46,8 +34,19 @@ node['ironic']['bridges'].each do |br, data|
     not_if "ip link show #{data['interface']} | grep UP"
   end
 
+  execute "sets #{br} link UP" do
+    command "ip link set #{br} up"
+    not_if "ip link show #{br} | grep UP"
+  end
+
+  execute "remove IP from #{data['interface']}" do
+    command "ip addr del #{data['ip']}/#{data['mask']} dev #{data['interface']}"
+    only_if { data.key?('ip') && data.key?('mask') }
+    only_if "ip a show #{data['interface']} | grep ' #{data['ip']}/#{data['mask']}'"
+  end
+
   execute "Sets IP config for #{br}" do
-    command "ifconfig #{br} #{data['ip']}/#{data['mask']} up"
+    command "ip addr add #{data['ip']}/#{data['mask']} dev #{br}"
     only_if { data.key?('ip') && data.key?('mask') }
     not_if "ip addr show #{br} | grep #{data['ip']}"
   end
@@ -56,6 +55,12 @@ node['ironic']['bridges'].each do |br, data|
     command 'systemctl restart neutron-openvswitch-agent.service'
     action :nothing
   end
+end
+
+execute 'set default gateway' do
+  command "route add default gw #{node['ironic']['gateway']}"
+  not_if { node['ironic']['gateway'].nil? }
+  not_if "route -n | awk '{print $1}' | grep '0.0.0.0'"
 end
 
 node['ironic']['networks'].each do |net, data|

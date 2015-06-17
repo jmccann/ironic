@@ -5,10 +5,16 @@ describe 'ironic::populate_neutron' do
 
   cached(:chef_run) do
     ChefSpec::ServerRunner.new(platform: 'redhat', version: '6.5', step_into: ['rhel_network_interface']) do |node, _server|
+      node.set['ironic']['gateway'] = '10.0.2.2'
+
       node.set['ironic']['bridges']['br-bare']['interface'] = 'enp0s8'
       node.set['ironic']['bridges']['br-bare']['phys_net'] = 'physbare'
       node.set['ironic']['bridges']['br-bare']['ip'] = '192.168.50.1'
       node.set['ironic']['bridges']['br-bare']['mask'] = '24'
+      node.set['ironic']['bridges']['br-gate']['interface'] = 'enp0s3'
+      node.set['ironic']['bridges']['br-gate']['phys_net'] = 'physgate'
+      node.set['ironic']['bridges']['br-gate']['ip'] = '10.0.2.15'
+      node.set['ironic']['bridges']['br-gate']['mask'] = '24'
 
       node.set['ironic']['networks']['baremetal']['phys_net'] = 'physbare'
       node.set['ironic']['networks']['baremetal']['network'] = '192.168.50.0'
@@ -19,18 +25,27 @@ describe 'ironic::populate_neutron' do
   end
 
   before do
-    stub_command("ip a show enp0s8 | grep ' 192.168.50.1/'").and_return(true)
-    stub_command('ovs-vsctl show | grep br-bare').and_return(false)
+    stub_command("ip a show enp0s8 | grep ' 192.168.50.1/24'").and_return(true)
+    stub_command("ovs-vsctl show | grep 'Bridge br-bare'").and_return(false)
     stub_command('ovs-vsctl show | grep enp0s8').and_return(false)
     stub_command('ip link show enp0s8 | grep UP').and_return(false)
+    stub_command('ip link show br-bare | grep UP').and_return(false)
     stub_command('ip addr show br-bare | grep 192.168.50.1').and_return(false)
 
+    stub_command("ip a show enp0s3 | grep ' 10.0.2.15/24'").and_return(true)
+    stub_command("ovs-vsctl show | grep 'Bridge br-gate'").and_return(false)
+    stub_command('ovs-vsctl show | grep enp0s3').and_return(false)
+    stub_command('ip link show enp0s3 | grep UP').and_return(false)
+    stub_command('ip link show br-gate | grep UP').and_return(false)
+    stub_command('ip addr show br-gate | grep 10.0.2.15').and_return(false)
+
+    stub_command("route -n | awk '{print $1}' | grep '0.0.0.0'").and_return(false)
     stub_command("      export OS_USERNAME=admin\n      export OS_PASSWORD=9NDaxGTfwRpHrL7j\n      export OS_TENANT_NAME=admin\n      export OS_AUTH_URL=http://127.0.0.1:5000/v2.0\n\n      neutron net-list -F name | egrep \"\\|[ ]+baremetal[ ]+\\|\"\n").and_return(false)
     stub_command("      export OS_USERNAME=admin\n      export OS_PASSWORD=9NDaxGTfwRpHrL7j\n      export OS_TENANT_NAME=admin\n      export OS_AUTH_URL=http://127.0.0.1:5000/v2.0\n\n      neutron subnet-list -F name | egrep \"\\|[ ]+baremetal-subnet[ ]+\\|\"\n").and_return(false)
   end
 
   it 'removes matching IP from interface' do
-    expect(chef_run).to run_execute('remove IP from enp0s8').with(command: "ip addr del $(ip a show enp0s8 | grep ' 192.168.50.1/' | awk '{print $2}') dev enp0s8")
+    expect(chef_run).to run_execute('remove IP from enp0s8').with(command: 'ip addr del 192.168.50.1/24 dev enp0s8')
   end
 
   it 'adds a new bridge interface' do
@@ -46,6 +61,10 @@ describe 'ironic::populate_neutron' do
   end
 
   it 'configures IP for bridge' do
-    expect(chef_run).to run_execute('Sets IP config for br-bare').with(command: 'ifconfig br-bare 192.168.50.1/24 up')
+    expect(chef_run).to run_execute('Sets IP config for br-bare').with(command: 'ip addr add 192.168.50.1/24 dev br-bare')
+  end
+
+  it 'configures default gateway' do
+    expect(chef_run).to run_execute('set default gateway').with(command: 'route add default gw 10.0.2.2')
   end
 end

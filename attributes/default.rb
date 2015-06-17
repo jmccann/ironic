@@ -1,5 +1,6 @@
 default['ironic']['bridges'] = []
 default['ironic']['networks'] = []
+default['ironic']['gateway'] = nil
 
 default['openstack']['yum']['uri'] = 'http://repos.fedorapeople.org/repos/openstack/openstack-kilo/el7'
 default['openstack']['databag_type'] = 'vault'
