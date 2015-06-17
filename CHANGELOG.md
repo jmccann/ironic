@@ -1,3 +1,7 @@
+2.1.0
+-----
+* Ability to set default gw when assigning primary IP to a bridge interface
+
 2.0.3
 -----
 * Fix bug in setting invalid enabled_drivers for Ironic
