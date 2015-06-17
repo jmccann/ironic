@@ -46,3 +46,7 @@ export OS_VOLUME_API_VERSION=2
 @test 'baremetal-subnet subnet created' {
   neutron subnet-show baremetal-subnet
 }
+
+@test 'baremetal-subnet has gateway set' {
+  neutron subnet-show baremetal-subnet | grep gateway_ip | grep 192.168.50.1
+}

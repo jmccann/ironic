@@ -81,7 +81,7 @@ node['ironic']['networks'].each do |net, data|
   execute "create #{net} subnet" do
     environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
                 'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
-    command "neutron subnet-create #{net} #{data['network']}/#{data['mask']} --name #{net}-subnet --ip-version=4 --gateway=#{data['ip']} --allocation-pool start=#{data['allocation_start']},end=#{data['allocation_end']} --enable-dhcp" # rubocop:disable LineLength
+    command "neutron subnet-create #{net} #{data['network']}/#{data['mask']} --name #{net}-subnet --ip-version=4 --gateway=#{data['gateway']} --allocation-pool start=#{data['allocation_start']},end=#{data['allocation_end']} --enable-dhcp" # rubocop:disable LineLength
     not_if <<-EOF
       export OS_USERNAME=#{admin_user}
       export OS_PASSWORD=#{admin_pass}

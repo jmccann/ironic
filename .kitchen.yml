@@ -42,6 +42,7 @@ suites:
             phys_net: physbare
             network: 192.168.50.0
             mask: 24
+            gateway: 192.168.50.1
             allocation_start: 192.168.50.100
             allocation_end: 192.168.50.200
       openstack:
@@ -92,6 +93,7 @@ suites:
             phys_net: physbare
             network: 192.168.50.0
             mask: 24
+            gateway: 192.168.50.1
             allocation_start: 192.168.50.100
             allocation_end: 192.168.50.200
       openstack:

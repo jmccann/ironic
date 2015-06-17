@@ -18,9 +18,16 @@ describe 'ironic::populate_neutron' do
 
       node.set['ironic']['networks']['baremetal']['phys_net'] = 'physbare'
       node.set['ironic']['networks']['baremetal']['network'] = '192.168.50.0'
+      node.set['ironic']['networks']['baremetal']['gateway'] = '192.168.50.1'
       node.set['ironic']['networks']['baremetal']['mask'] = '24'
       node.set['ironic']['networks']['baremetal']['allocation_start'] = '192.168.50.100'
       node.set['ironic']['networks']['baremetal']['allocation_end'] = '192.168.50.200'
+
+      node.set['ironic']['networks']['test']['phys_net'] = 'physbare'
+      node.set['ironic']['networks']['test']['network'] = '192.168.55.0'
+      node.set['ironic']['networks']['test']['mask'] = '24'
+      node.set['ironic']['networks']['test']['allocation_start'] = '192.168.55.100'
+      node.set['ironic']['networks']['test']['allocation_end'] = '192.168.55.200'
     end.converge(described_recipe)
   end
 
@@ -42,6 +49,8 @@ describe 'ironic::populate_neutron' do
     stub_command("route -n | awk '{print $1}' | grep '0.0.0.0'").and_return(false)
     stub_command("      export OS_USERNAME=admin\n      export OS_PASSWORD=9NDaxGTfwRpHrL7j\n      export OS_TENANT_NAME=admin\n      export OS_AUTH_URL=http://127.0.0.1:5000/v2.0\n\n      neutron net-list -F name | egrep \"\\|[ ]+baremetal[ ]+\\|\"\n").and_return(false)
     stub_command("      export OS_USERNAME=admin\n      export OS_PASSWORD=9NDaxGTfwRpHrL7j\n      export OS_TENANT_NAME=admin\n      export OS_AUTH_URL=http://127.0.0.1:5000/v2.0\n\n      neutron subnet-list -F name | egrep \"\\|[ ]+baremetal-subnet[ ]+\\|\"\n").and_return(false)
+    stub_command("      export OS_USERNAME=admin\n      export OS_PASSWORD=9NDaxGTfwRpHrL7j\n      export OS_TENANT_NAME=admin\n      export OS_AUTH_URL=http://127.0.0.1:5000/v2.0\n\n      neutron net-list -F name | egrep \"\\|[ ]+test[ ]+\\|\"\n").and_return(false)
+    stub_command("      export OS_USERNAME=admin\n      export OS_PASSWORD=9NDaxGTfwRpHrL7j\n      export OS_TENANT_NAME=admin\n      export OS_AUTH_URL=http://127.0.0.1:5000/v2.0\n\n      neutron subnet-list -F name | egrep \"\\|[ ]+test-subnet[ ]+\\|\"\n").and_return(false)
   end
 
   it 'removes matching IP from interface' do
@@ -66,5 +75,17 @@ describe 'ironic::populate_neutron' do
 
   it 'configures default gateway' do
     expect(chef_run).to run_execute('set default gateway').with(command: 'route add default gw 10.0.2.2')
+  end
+
+  it 'adds neutron net baremetal' do
+    expect(chef_run).to run_execute('create baremetal net').with(command: 'neutron net-create baremetal --shared --provider:network_type flat --provider:physical_network physbare')
+  end
+
+  it 'adds neutron subnet baremetal-subnet' do
+    expect(chef_run).to run_execute('create baremetal subnet').with(command: 'neutron subnet-create baremetal 192.168.50.0/24 --name baremetal-subnet --ip-version=4 --gateway=192.168.50.1 --allocation-pool start=192.168.50.100,end=192.168.50.200 --enable-dhcp')
+  end
+
+  it 'adds neutron subnet test-subnet' do
+    expect(chef_run).to run_execute('create test subnet').with(command: 'neutron subnet-create test 192.168.55.0/24 --name test-subnet --ip-version=4 --gateway= --allocation-pool start=192.168.55.100,end=192.168.55.200 --enable-dhcp')
   end
 end
