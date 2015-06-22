@@ -1,3 +1,5 @@
+include_recipe 'openstack-bare-metal::conductor'
+
 class ::Chef::Recipe # rubocop:disable Documentation
   include ::Openstack
 end
@@ -44,3 +46,8 @@ r.variables api_bind_address: api_bind.host,
             identity_uri: identity_uri,
             service_pass: service_pass,
             swift_key: get_password('user', 'admin')
+
+# Contribute fix node cleaning
+cookbook_file '/usr/lib/python2.7/site-packages/ironic/drivers/modules/agent_base_vendor.py' do
+  notifies :restart, 'service[ironic-conductor]', :delayed
+end
