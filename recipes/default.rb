@@ -49,6 +49,8 @@ include_recipe 'openstack-bare-metal::api'
 include_recipe 'ironic::overrides'
 include_recipe 'openstack-bare-metal::identity_registration'
 
+include_recipe 'ironic::inspector'
+
 include_recipe 'openstack-compute::nova-setup'
 include_recipe 'openstack-compute::client'
 include_recipe 'openstack-compute::scheduler'

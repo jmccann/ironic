@@ -1,0 +1,7 @@
+default discover
+
+label discover
+kernel discovery.kernel
+append initrd=discovery.initramfs discoverd_callback_url=http://<%= node['openstack']['bare-metal']['tftp']['server'] %>:5050/v1/continue
+
+ipappend 3

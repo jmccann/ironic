@@ -1,6 +1,12 @@
 default['ironic']['bridges'] = []
 default['ironic']['networks'] = []
 default['ironic']['gateway'] = nil
+default['ironic']['inspector']['sqlite']['path'] = '/var/lib/ironic-inspector/inspector.sqlite'
+default['ironic']['inspector']['dnsmasq_interface'] = 'br-int'
+default['ironic']['inspector']['add_ports'] = 'all'
+default['ironic']['inspector']['keep_ports'] = 'present'
+default['ironic']['inspector']['tftpboot_path'] = '/tftpboot'
+default['ironic']['inspector']['dhcp_range'] = ''
 
 default['openstack']['yum']['uri'] = 'http://repos.fedorapeople.org/repos/openstack/openstack-kilo/el7'
 default['openstack']['databag_type'] = 'vault'

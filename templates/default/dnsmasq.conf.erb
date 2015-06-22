@@ -1,0 +1,10 @@
+# This is the recommend minimum for using discovery
+port=0
+bind-interfaces
+enable-tftp
+
+# These values do not have reasonable defaults
+tftp-root=<%= node['ironic']['inspector']['tftpboot_path'] %>
+interface=<%= node['ironic']['inspector']['dnsmasq_interface'] %>
+dhcp-range=<%= node['ironic']['inspector']['dhcp_range'] %>
+dhcp-boot=pxelinux.0

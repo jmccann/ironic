@@ -25,6 +25,9 @@ suites:
       - recipe[fake::default]
     attributes:
       ironic:
+        inspector:
+          dnsmasq_interface: br-bare
+          dhcp_range: 192.168.50.201,192.168.50.250
         gateway: 10.0.2.2
         bridges:
           br-bare:
@@ -76,6 +79,9 @@ suites:
       - recipe[fake::default]
     attributes:
       ironic:
+        inspector:
+          dnsmasq_interface: br-bare
+          dhcp_range: 192.168.50.201,192.168.50.250
         gateway: 10.0.2.2
         bridges:
           br-bare:
