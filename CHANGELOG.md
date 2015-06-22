@@ -1,3 +1,7 @@
+2.2.1
+-----
+* Fix ironic conductor to clean nodes properly
+
 2.2.0
 -----
 * Ability to set gateway on defined neutron subnet
