@@ -57,6 +57,9 @@ See dev databags @ [test/integration/data_bags](test/integration/data_bags)
 
 When it is done you can hit the dashboard @ http://localhost:8080/ admin:password
 
+# Install VirtualBox PXE Driver
+Install VirtualBox Extension Pack for PXE Driver support from https://www.virtualbox.org/wiki/Downloads
+
 # Start VBox Webserver thing on host
 Blank out password:
 ```
@@ -82,7 +85,7 @@ On Host:
 
 # Run Chef
 ```
-bexec kitchen conv
+bundle exec kitchen conv
 ```
 
 # Verify stuff
