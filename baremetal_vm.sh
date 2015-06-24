@@ -11,5 +11,3 @@ VBoxManage modifyvm $VM --ioapic on
 VBoxManage modifyvm $VM --boot1 net --boot2 disk --boot3 none --boot4 none
 VBoxManage modifyvm $VM --memory 4096 --vram 128
 VBoxManage modifyvm $VM --nic1 intnet --nictype1 82540EM --macaddress1 0800276EDF70
-
-# /Applications/VirtualBox.app/Contents/MacOS/VBoxHeadless -s $VM &
