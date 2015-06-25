@@ -14,3 +14,5 @@ cookbook 'openstack-compute', github: 'stackforge/cookbook-openstack-compute', r
 cookbook 'statsd', github: 'att-cloud/cookbook-statsd', ref: 'd3298ae4ec4a6d8cc2ca166f0688a92753ced338'
 
 cookbook 'fake', path: 'test/integration/fixtures/cookbooks/fake'
+
+cookbook 'yum-epel', '0.6.0' # New yum-epel cookbooks fail
