@@ -29,6 +29,8 @@ suites:
         inspector:
           dnsmasq_interface: br-bare
           dhcp_range: 192.168.50.201,192.168.50.250
+          discovery_kernel: https://www.googledrive.com/host/0B7ZaljvkcyssMGN0bmk1OV9Fdnc
+          discovery_initramfs: https://www.googledrive.com/host/0B7ZaljvkcyssWlUxdHJWYWI3M2M
         gateway: 10.0.2.2
         bridges:
           br-bare:
@@ -83,6 +85,8 @@ suites:
         inspector:
           dnsmasq_interface: br-bare
           dhcp_range: 192.168.50.201,192.168.50.250
+          discovery_kernel: https://www.googledrive.com/host/0B7ZaljvkcyssMGN0bmk1OV9Fdnc
+          discovery_initramfs: https://www.googledrive.com/host/0B7ZaljvkcyssWlUxdHJWYWI3M2M
         gateway: 10.0.2.2
         bridges:
           br-bare:
