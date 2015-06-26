@@ -120,6 +120,35 @@ watch ironic node-list
 
 Can take up to 5 min before VM will auto power-on.  Be patient.
 
+# Inspector
+
+Currently inspector is configured to run.  It may cause issues with demo'ing as it runs it's own DHCP server alongside neutrons and we have it running on the same network.  This is because neutron does not currently serve addresses to 'unknown' systems which is required for discovery.  Work continues to finalize a solution by having discovery DHCP not serve addresses to systems we DO know about.
+
+Inspector works by providing a 'default' DHCP/PXE for systems.  They then boot a discovery ramdisk that gathers system information and POSTs it back to the inspector API.
+
+To use inspector you use:
+* Register the system in Ironic with:
+ * BMC information
+* Set the system in a manage state
+ * `ironic node-set-provision-state $NODE manage`
+* Inspect the system
+ * `ironic node-set-provision-state $NODE inspect`
+* Put the system back in the pool after inspection is done
+ * `ironic node-set-provision-state $NODE provide`
+
+Currently BMC Address, MACs, CPU, Disk and Memory are gathered.
+
+Mapping of discovered node to ironic metadata is done by matching:
+* BMC IP discovered to node registered in Ironic with same BMC address
+* MACs discovered to node registered in Ironic with same MAC (ironic port)
+
+You can extend inspection by:
+* Adding 'plugins' to the inspector API.  This is basically creating new API endpoints and mapping how to update the node in ironic.
+* Generating a discovery ramdisk with logic on how to collect the additional information and how to post it to the inspector API
+ * Could create additional discovery elements to manage building an extended discovery ramdisk with diskimage-builder
+
+By default you can only use inspector with pxe_ drivers.  However we have PoC'd adding code to agent_ drivers with agent_vbox and it seems to be working fine.  We will extend the rest of the agent_ drivers as well in the future.
+
 # Resources
 
 * http://docs.openstack.org/developer/ironic/drivers/vbox.html - Using Vbox to simulate baremetal nodes for ironic.  This assumes a base undertanding of how a lot of stuff works already.
