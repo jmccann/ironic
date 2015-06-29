@@ -8,3 +8,10 @@ tftp-root=<%= node['ironic']['inspector']['tftpboot_path'] %>
 interface=<%= node['ironic']['inspector']['dnsmasq_interface'] %>
 dhcp-range=<%= node['ironic']['inspector']['dhcp_range'] %>
 dhcp-boot=pxelinux.0
+
+# Ignore the following MACs already registered in neutron
+<% @macs.split("\n").each do |mac| %>
+dhcp-host=<%= mac %>,ignore
+<% end %>
+
+# END

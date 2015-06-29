@@ -1,5 +1,7 @@
-class ::Chef::Recipe # rubocop:disable Documentation
-  include ::Openstack
+class Chef
+  class Recipe # rubocop:disable Documentation
+    include ::Openstack
+  end
 end
 
 include_recipe 'openstack-bare-metal::conductor'
@@ -41,10 +43,19 @@ template '/etc/ironic-discoverd/discoverd.conf' do
   notifies :restart, 'service[openstack-ironic-discoverd]', :delayed
 end
 
+ENV['OS_USERNAME'] = node['openstack']['bare-metal']['service_user']
+ENV['OS_PASSWORD'] = service_pass
+ENV['OS_TENANT_NAME'] = 'service'
+ENV['OS_AUTH_URL'] = auth_uri
+
+macs = Mixlib::ShellOut.new("ironic port-list | tail -n+3 | grep -v \+ | awk '{print $4}'")
+macs.run_command
+
 template '/etc/ironic-discoverd/dnsmasq.conf' do
   owner 'ironic'
   group 'ironic'
   mode 0640
+  variables macs: macs.stdout
   notifies :restart, 'service[openstack-ironic-discoverd-dnsmasq]', :delayed
 end
 

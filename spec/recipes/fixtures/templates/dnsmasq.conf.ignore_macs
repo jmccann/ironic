@@ -1,0 +1,16 @@
+# This is the recommend minimum for using discovery
+port=0
+bind-interfaces
+enable-tftp
+
+# These values do not have reasonable defaults
+tftp-root=/tftpboot
+interface=br-int
+dhcp-range=
+dhcp-boot=pxelinux.0
+
+# Ignore the following MACs already registered in neutron
+dhcp-host=00:00:00:00:00:00,ignore
+dhcp-host=,00:00:00:00:00:01,ignore
+
+# END
