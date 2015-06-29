@@ -1,8 +1,6 @@
 require 'spec_helper.rb'
 
 describe 'ironic::build_inspector_discovery' do
-  include ChefVault::TestFixtures.rspec_shared_context
-
   cached(:chef_run) do
     ChefSpec::SoloRunner.new(platform: 'redhat', version: '6.5').converge(described_recipe)
   end

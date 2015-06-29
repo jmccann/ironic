@@ -1,8 +1,6 @@
 require 'spec_helper.rb'
 
 describe 'ironic::download_inspector_discovery' do
-  include ChefVault::TestFixtures.rspec_shared_context
-
   cached(:chef_run) do
     ChefSpec::SoloRunner.new(platform: 'redhat', version: '6.5') do |node|
       node.set['ironic']['inspector']['discovery_kernel'] = 'https://test.com/discover.kernel'
