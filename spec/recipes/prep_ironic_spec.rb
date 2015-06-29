@@ -4,8 +4,7 @@ describe 'ironic::prep_ironic' do
   include ChefVault::TestFixtures.rspec_shared_context
 
   cached(:chef_run) do
-    ChefSpec::ServerRunner.new(platform: 'redhat', version: '6.5') do |node|
-    end.converge(described_recipe)
+    ChefSpec::ServerRunner.new(platform: 'redhat', version: '6.5').converge(described_recipe)
   end
 
   it 'gets swift auth' do
