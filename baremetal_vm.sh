@@ -10,4 +10,4 @@ VBoxManage storageattach $VM --storagectl "SATA Controller" --port 0 --device 0 
 VBoxManage modifyvm $VM --ioapic on
 VBoxManage modifyvm $VM --boot1 net --boot2 disk --boot3 none --boot4 none
 VBoxManage modifyvm $VM --memory 4096 --vram 128
-VBoxManage modifyvm $VM --nic1 intnet --nictype1 82540EM --macaddress1 0800276EDF70
+VBoxManage modifyvm $VM --nic1 intnet --nictype1 82540EM --macaddress1 0800276EDF70 --nicpromisc1 allow-all

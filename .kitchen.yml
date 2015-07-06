@@ -12,6 +12,7 @@ platforms:
       customize:
         cpus: 2
         memory: 6144
+        nicpromisc2: allow-all
       network:
         - ["forwarded_port", {guest: 443, host: 9443, auto_correct: true}]
         - ["forwarded_port", {guest: 80, host: 8080, auto_correct: true}]
@@ -56,6 +57,9 @@ suites:
           debug: True
           api:
             swift_store_auth_address: http://10.0.2.15:5000/v2.0
+        network:
+          l3:
+            external_network_bridge_interface: enp0s3
         bare-metal:
           debug: True
           api_url: http://10.0.2.15:6385
