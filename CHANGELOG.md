@@ -1,3 +1,7 @@
+2.3.0
+-----
+* Add ironic inspector
+
 2.2.1
 -----
 * Fix ironic conductor to clean nodes properly
