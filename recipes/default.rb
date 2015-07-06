@@ -36,6 +36,7 @@ include_recipe 'ironic::populate_glance'
 include_recipe 'openstack-network::openvswitch'
 include_recipe 'openstack-network::server'
 include_recipe 'openstack-network::dhcp_agent'
+include_recipe 'openstack-network::metadata_agent'
 include_recipe 'openstack-network::identity_registration'
 include_recipe 'ironic::populate_neutron'
 

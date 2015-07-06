@@ -30,6 +30,8 @@ default['openstack']['compute']['scheduler']['scheduler_host_manager'] = 'nova.s
 default['openstack']['compute']['config']['ram_allocation_ratio'] = '1.0'
 default['openstack']['compute']['config']['reserved_host_memory_mb'] = 0
 default['openstack']['compute']['network']['service_type'] = 'neutron'
+default['openstack']['network']['dhcp']['enable_isolated_metadata'] = 'True'
+default['openstack']['network']['dhcp']['enable_metadata_network'] = 'True'
 
 default['openstack']['network']['dhcp']['dnsmasq_rpm_version'] = ''
 default['openstack']['network']['ml2']['tenant_network_types'] = 'flat'
