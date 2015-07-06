@@ -38,11 +38,6 @@ suites:
             phys_net: physbare
             ip: 192.168.50.1
             mask: 24
-          br-gate:
-            interface: enp0s3
-            phys_net: physgate
-            ip: 10.0.2.15
-            mask: 24
         networks:
           baremetal:
             phys_net: physbare
@@ -93,11 +88,6 @@ suites:
             interface: enp0s8
             phys_net: physbare
             ip: 192.168.50.1
-            mask: 24
-          br-gate:
-            interface: enp0s3
-            phys_net: physgate
-            ip: 10.0.2.15
             mask: 24
         networks:
           baremetal:
