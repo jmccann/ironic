@@ -1,3 +1,7 @@
+2.4.0
+-----
+* Add metadata service
+
 2.3.0
 -----
 * Add ironic inspector
