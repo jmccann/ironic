@@ -50,3 +50,12 @@ export OS_VOLUME_API_VERSION=2
 @test 'baremetal-subnet has gateway set' {
   neutron subnet-show baremetal-subnet | grep gateway_ip | grep 192.168.50.1
 }
+
+@test 'metadata service is configured' {
+  namespace=$(ip netns | head -n1)
+  # IP is configured in network namespace
+  ip netns exec $namespace ip a | grep '169.254.169.254'
+
+  # Listening on port 80
+  ip netns exec qdhcp-17f631b4-2262-4e9a-996b-887d0ef5d340 netstat -ant | grep ':80 '
+}
