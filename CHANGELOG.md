@@ -1,3 +1,7 @@
+2.5.0
+-----
+* Only download discovery ramdisk if missing
+
 2.4.0
 -----
 * Add metadata service
