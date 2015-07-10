@@ -1,3 +1,7 @@
+3.0.0
+-----
+* Have inspector use tftp server provided for ironic
+
 2.5.0
 -----
 * Only download discovery ramdisk if missing
