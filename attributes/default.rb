@@ -5,7 +5,6 @@ default['ironic']['inspector']['sqlite']['path'] = '/var/lib/ironic-inspector/in
 default['ironic']['inspector']['dnsmasq_interface'] = 'br-int'
 default['ironic']['inspector']['add_ports'] = 'all'
 default['ironic']['inspector']['keep_ports'] = 'present'
-default['ironic']['inspector']['tftpboot_path'] = '/tftpboot'
 default['ironic']['inspector']['dhcp_range'] = ''
 default['ironic']['inspector']['discovery_kernel'] = nil
 default['ironic']['inspector']['discovery_initramfs'] = nil

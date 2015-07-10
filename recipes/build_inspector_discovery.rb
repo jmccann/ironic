@@ -21,11 +21,11 @@ execute 'create discovery ramdisk' do
 end
 
 execute 'copy discovery kernel' do
-  command "cp /var/tmp/discovery.kernel #{node['ironic']['inspector']['tftpboot_path']}/discovery.kernel"
-  creates "#{node['ironic']['inspector']['tftpboot_path']}/discovery.kernel"
+  command "cp /var/tmp/discovery.kernel #{node['openstack']['bare-metal']['tftp']['root_path']}/discovery.kernel"
+  creates "#{node['openstack']['bare-metal']['tftp']['root_path']}/discovery.kernel"
 end
 
 execute 'copy discovery initramfs' do
-  command "cp /var/tmp/discovery.initramfs #{node['ironic']['inspector']['tftpboot_path']}/discovery.initramfs"
-  creates "#{node['ironic']['inspector']['tftpboot_path']}/discovery.initramfs"
+  command "cp /var/tmp/discovery.initramfs #{node['openstack']['bare-metal']['tftp']['root_path']}/discovery.initramfs"
+  creates "#{node['openstack']['bare-metal']['tftp']['root_path']}/discovery.initramfs"
 end

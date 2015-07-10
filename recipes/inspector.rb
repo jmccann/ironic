@@ -11,15 +11,11 @@ package 'openstack-ironic-discoverd' do
   options '--nogpgcheck'
 end
 
-directory "#{node['ironic']['inspector']['tftpboot_path']}/pxelinux.cfg" do
+directory "#{node['openstack']['bare-metal']['tftp']['root_path']}/pxelinux.cfg" do
   mode 0755
   recursive true
 end
-remote_file "#{node['ironic']['inspector']['tftpboot_path']}/pxelinux.0" do
-  mode 0644
-  source 'file:////var/lib/tftpboot/pxelinux.0'
-end
-template "#{node['ironic']['inspector']['tftpboot_path']}/pxelinux.cfg/default" do
+template "#{node['openstack']['bare-metal']['tftp']['root_path']}/pxelinux.cfg/default" do
   mode 0644
 end
 

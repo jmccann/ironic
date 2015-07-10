@@ -18,15 +18,15 @@
 }
 
 @test 'discovery ramdisk is created' {
-  [ -s /tftpboot/discovery.initramfs ]
-  [ -s /tftpboot/discovery.kernel ]
+  [ -s /var/lib/tftpboot/discovery.initramfs ]
+  [ -s /var/lib/tftpboot/discovery.kernel ]
 }
 
 @test 'default pxe config generated' {
-  [ -s /tftpboot/pxelinux.cfg/default ]
+  [ -s /var/lib/tftpboot/pxelinux.cfg/default ]
 }
 
 @test 'discovery ramdisk is accessbile via tftp' {
-  curl tftp://localhost/discovery.kernel
-  curl tftp://localhost/discovery.initramfs
+  curl tftp://10.0.2.15/discovery.kernel
+  curl tftp://10.0.2.15/discovery.initramfs
 }

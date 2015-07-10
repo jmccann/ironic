@@ -1,13 +1,15 @@
 # This is the recommend minimum for using discovery
 port=0
 bind-interfaces
-enable-tftp
 
 # These values do not have reasonable defaults
-tftp-root=<%= node['ironic']['inspector']['tftpboot_path'] %>
 interface=<%= node['ironic']['inspector']['dnsmasq_interface'] %>
 dhcp-range=<%= node['ironic']['inspector']['dhcp_range'] %>
-dhcp-boot=pxelinux.0
+dhcp-option=26,1454
+dhcp-option=option:bootfile-name,pxelinux.0
+dhcp-option=option:server-ip-address,<%= node['openstack']['bare-metal']['tftp']['server'] %>
+dhcp-option=option:tftp-server,<%= node['openstack']['bare-metal']['tftp']['server'] %>
+dhcp-option=option:router,<%= node['ironic']['inspector']['gateway'] %>
 
 # Ignore the following MACs already registered in neutron
 <% @macs.split("\n").each do |mac| %>

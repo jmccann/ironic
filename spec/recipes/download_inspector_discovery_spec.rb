@@ -9,10 +9,10 @@ describe 'ironic::download_inspector_discovery' do
   end
 
   it 'downloads discovery kernel' do
-    expect(chef_run).to create_remote_file('/tftpboot/discovery.kernel').with(source: 'https://test.com/discover.kernel')
+    expect(chef_run).to create_remote_file_if_missing('/var/lib/tftpboot/discovery.kernel').with(source: 'https://test.com/discover.kernel')
   end
 
   it 'downloads discovery initramfs' do
-    expect(chef_run).to create_remote_file('/tftpboot/discovery.initramfs').with(source: 'https://test.com/discover.initramfs')
+    expect(chef_run).to create_remote_file_if_missing('/var/lib/tftpboot/discovery.initramfs').with(source: 'https://test.com/discover.initramfs')
   end
 end

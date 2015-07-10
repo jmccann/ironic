@@ -1,13 +1,15 @@
 # This is the recommend minimum for using discovery
 port=0
 bind-interfaces
-enable-tftp
 
 # These values do not have reasonable defaults
-tftp-root=/tftpboot
 interface=br-int
-dhcp-range=
-dhcp-boot=pxelinux.0
+dhcp-range=192.168.50.201,192.168.50.250
+dhcp-option=26,1454
+dhcp-option=option:bootfile-name,pxelinux.0
+dhcp-option=option:server-ip-address,127.0.0.1
+dhcp-option=option:tftp-server,127.0.0.1
+dhcp-option=option:router,192.168.50.1
 
 # Ignore the following MACs already registered in neutron
 

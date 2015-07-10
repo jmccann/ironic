@@ -7,7 +7,10 @@ describe 'ironic::inspector' do
 
   context 'defaults' do
     cached(:chef_run) do
-      ChefSpec::ServerRunner.new(platform: 'redhat', version: '6.5').converge(described_recipe)
+      ChefSpec::ServerRunner.new(platform: 'redhat', version: '6.5') do |node, _server|
+        node.set['ironic']['inspector']['dhcp_range'] = '192.168.50.201,192.168.50.250'
+        node.set['ironic']['inspector']['gateway'] = '192.168.50.1'
+      end.converge(described_recipe)
     end
 
     before do
@@ -45,7 +48,10 @@ describe 'ironic::inspector' do
     let(:macs_stdout) { "00:00:00:00:00:00\n,00:00:00:00:00:01\n" }
 
     cached(:chef_run) do
-      ChefSpec::ServerRunner.new(platform: 'redhat', version: '6.5').converge(described_recipe)
+      ChefSpec::ServerRunner.new(platform: 'redhat', version: '6.5') do |node, _server|
+        node.set['ironic']['inspector']['dhcp_range'] = '192.168.50.201,192.168.50.250'
+        node.set['ironic']['inspector']['gateway'] = '192.168.50.1'
+      end.converge(described_recipe)
     end
 
     before do

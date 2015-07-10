@@ -23,7 +23,7 @@ describe 'ironic::build_inspector_discovery' do
   end
 
   it 'installs the discovery ramdisk' do
-    expect(chef_run).to run_execute('copy discovery kernel').with(command: 'cp /var/tmp/discovery.kernel /tftpboot/discovery.kernel')
-    expect(chef_run).to run_execute('copy discovery initramfs').with(command: 'cp /var/tmp/discovery.initramfs /tftpboot/discovery.initramfs')
+    expect(chef_run).to run_execute('copy discovery kernel').with(command: 'cp /var/tmp/discovery.kernel /var/lib/tftpboot/discovery.kernel')
+    expect(chef_run).to run_execute('copy discovery initramfs').with(command: 'cp /var/tmp/discovery.initramfs /var/lib/tftpboot/discovery.initramfs')
   end
 end
