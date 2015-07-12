@@ -11,18 +11,20 @@ r = resources("directory[#{node['tftp']['directory']}]")
 r.owner 'ironic'
 r.group 'ironic'
 
-directory '/var/lib/tftpboot/pxelinux.cfg' do
+directory "#{node['openstack']['bare-metal']['tftp']['root_path']}/pxelinux.cfg" do
   user 'ironic'
   group 'ironic'
+  mode 0755
+  recursive true
 end
 
-directory '/var/lib/tftpboot/var/lib' do
+directory "#{node['openstack']['bare-metal']['tftp']['root_path']}/var/lib" do
   user 'ironic'
   group 'ironic'
   recursive true
 end
 
 execute 'ln -s ../.. tftpboot' do
-  cwd '/var/lib/tftpboot/var/lib'
-  not_if '[ -e /var/lib/tftpboot/var/lib/tftpboot ]'
+  cwd "#{node['openstack']['bare-metal']['tftp']['root_path']}/var/lib"
+  not_if "[ -e #{node['openstack']['bare-metal']['tftp']['root_path']}/var/lib/tftpboot ]"
 end

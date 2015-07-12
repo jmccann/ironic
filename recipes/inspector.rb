@@ -11,10 +11,6 @@ package 'openstack-ironic-discoverd' do
   options '--nogpgcheck'
 end
 
-directory "#{node['openstack']['bare-metal']['tftp']['root_path']}/pxelinux.cfg" do
-  mode 0755
-  recursive true
-end
 template "#{node['openstack']['bare-metal']['tftp']['root_path']}/pxelinux.cfg/default" do
   mode 0644
 end

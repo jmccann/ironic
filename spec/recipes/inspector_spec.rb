@@ -29,6 +29,11 @@ describe 'ironic::inspector' do
       include_recipe 'ironic::build_inspector_discovery'
     end
 
+    it 'creates default pxelinux.cfg file' do
+      expect(chef_run).to create_template '/var/lib/tftpboot/pxelinux.cfg/default'
+      expect(chef_run).to render_file('/var/lib/tftpboot/pxelinux.cfg/default').with_content(File.read 'spec/recipes/fixtures/templates/default.default')
+    end
+
     it 'configures ironic-inspector' do
       expect(chef_run).to create_template('/etc/ironic-discoverd/discoverd.conf')
       expect(chef_run).to create_template('/etc/ironic-discoverd/dnsmasq.conf')
@@ -45,12 +50,13 @@ describe 'ironic::inspector' do
 
   context 'overrides' do
     let(:macs_shellout) { double('macs_shellout', run_command: nil, stdout: macs_stdout) }
-    let(:macs_stdout) { "00:00:00:00:00:00\n,00:00:00:00:00:01\n" }
+    let(:macs_stdout) { "00:00:00:00:00:00\n00:00:00:00:00:01\n" }
 
     cached(:chef_run) do
       ChefSpec::ServerRunner.new(platform: 'redhat', version: '6.5') do |node, _server|
         node.set['ironic']['inspector']['dhcp_range'] = '192.168.50.201,192.168.50.250'
         node.set['ironic']['inspector']['gateway'] = '192.168.50.1'
+        node.set['openstack']['bare-metal']['tftp']['server'] = '10.0.2.15'
       end.converge(described_recipe)
     end
 
@@ -60,6 +66,11 @@ describe 'ironic::inspector' do
 
       # From ironic::tftp
       stub_command('[ -e /var/lib/tftpboot/var/lib/tftpboot ]').and_return(true)
+    end
+
+    it 'creates default pxelinux.cfg file' do
+      expect(chef_run).to create_template '/var/lib/tftpboot/pxelinux.cfg/default'
+      expect(chef_run).to render_file('/var/lib/tftpboot/pxelinux.cfg/default').with_content(File.read 'spec/recipes/fixtures/templates/default.overrides')
     end
 
     it 'ignores DHCP for MACs registered in Ironic' do
