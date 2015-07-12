@@ -11,6 +11,11 @@ r = resources("directory[#{node['tftp']['directory']}]")
 r.owner 'ironic'
 r.group 'ironic'
 
+directory '/var/lib/tftpboot/pxelinux.cfg' do
+  user 'ironic'
+  group 'ironic'
+end
+
 directory '/var/lib/tftpboot/var/lib' do
   user 'ironic'
   group 'ironic'
