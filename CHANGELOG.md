@@ -1,3 +1,7 @@
+3.0.2
+-----
+* TFTP testing
+
 3.0.1
 -----
 * Fix tftpboot/pxelinux.cfg perms issue for Ironic
