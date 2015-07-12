@@ -1,3 +1,7 @@
+3.0.1
+-----
+* Fix tftpboot/pxelinux.cfg perms issue for Ironic
+
 3.0.0
 -----
 * Have inspector use tftp server provided for ironic
