@@ -1,3 +1,7 @@
+3.1.0
+-----
+* Add 'inspect' to agent_ipmitool driver
+
 3.0.2
 -----
 * TFTP testing
