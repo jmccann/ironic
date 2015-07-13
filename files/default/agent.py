@@ -42,6 +42,8 @@ class AgentAndIPMIToolDriver(base.BaseDriver):
         self.management = ipmitool.IPMIManagement()
         self.console = ipmitool.IPMIShellinaboxConsole()
         self.vendor = agent.AgentVendorInterface()
+        self.inspect = discoverd.DiscoverdInspect.create_if_enabled(
+            'AgentAndIPMIToolDriver')
 
 
 class AgentAndIPMINativeDriver(base.BaseDriver):
