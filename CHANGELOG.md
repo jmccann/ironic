@@ -1,3 +1,7 @@
+3.1.1
+-----
+* Fix chef-vault access
+
 3.1.0
 -----
 * Add 'inspect' to agent_ipmitool driver
