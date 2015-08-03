@@ -1,3 +1,7 @@
+3.1.2
+-----
+* Another bugfix for chef-vault
+
 3.1.1
 -----
 * Fix chef-vault access
