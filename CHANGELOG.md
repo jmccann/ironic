@@ -1,3 +1,7 @@
+4.0.0
+-----
+* Allow defining multiple subnets in a network
+
 3.1.5
 -----
 * Change default value for attr `networks` from `[]` to `{}` to better reflect the datastructure
