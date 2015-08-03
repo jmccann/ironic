@@ -4,11 +4,11 @@ maintainer_email 'jacob.mccann2@target.com'
 license          'Apache 2.0'
 description      'A cookbook for deploying Hanlon'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '3.1.2'
+version          '3.1.3'
 
 depends 'yum'
 depends 'tftp'
-depends 'chef-vault'
+depends 'chef-vault', '~> 1.3.0'
 depends 'openstack-common'
 depends 'openstack-ops-database'
 depends 'openstack-ops-messaging'

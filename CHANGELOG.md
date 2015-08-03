@@ -1,3 +1,7 @@
+3.1.3
+-----
+* Pin chef-vault dependency to current latest
+
 3.1.2
 -----
 * Another bugfix for chef-vault
