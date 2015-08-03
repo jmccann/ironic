@@ -63,7 +63,7 @@ execute 'set default gateway' do
   not_if "route -n | awk '{print $1}' | grep '0.0.0.0'"
 end
 
-node['ironic']['networks'].each do |net, data|
+node['ironic']['neutron']['networks'].each do |net, data|
   execute "create #{net} net" do
     environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
                 'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
@@ -77,18 +77,20 @@ node['ironic']['networks'].each do |net, data|
       neutron net-list -F name | egrep \"\\|[ ]+#{net}[ ]+\\|\"
     EOF
   end
+end
 
-  execute "create #{net} subnet" do
+node['ironic']['neutron']['subnets'].each do |subnet, data|
+  execute "create #{subnet} subnet" do
     environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
                 'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
-    command "neutron subnet-create #{net} #{data['network']}/#{data['mask']} --name #{net}-subnet --ip-version=4 --gateway=#{data['gateway']} --allocation-pool start=#{data['allocation_start']},end=#{data['allocation_end']} --enable-dhcp" # rubocop:disable LineLength
+    command "neutron subnet-create #{data['network_name']} #{data['network']}/#{data['mask']} --name #{subnet} --ip-version=4 --gateway=#{data['gateway']} --allocation-pool start=#{data['allocation_start']},end=#{data['allocation_end']} --enable-dhcp" # rubocop:disable LineLength
     not_if <<-EOF
       export OS_USERNAME=#{admin_user}
       export OS_PASSWORD=#{admin_pass}
       export OS_TENANT_NAME=#{admin_tenant}
       export OS_AUTH_URL=#{auth_uri}
 
-      neutron subnet-list -F name | egrep \"\\|[ ]+#{net}-subnet[ ]+\\|\"
+      neutron subnet-list -F name | egrep \"\\|[ ]+#{subnet}[ ]+\\|\"
     EOF
   end
 end

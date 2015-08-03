@@ -40,14 +40,18 @@ suites:
             phys_net: physbare
             ip: 192.168.50.1
             mask: 24
-        networks:
-          baremetal:
-            phys_net: physbare
-            network: 192.168.50.0
-            mask: 24
-            gateway: 192.168.50.1
-            allocation_start: 192.168.50.100
-            allocation_end: 192.168.50.200
+        neutron:
+          networks:
+            baremetal:
+              phys_net: physbare
+          subnets:
+            baremetal-subnet:
+              network_name: baremetal
+              network: 192.168.50.0
+              mask: 24
+              gateway: 192.168.50.1
+              allocation_start: 192.168.50.100
+              allocation_end: 192.168.50.200
       openstack:
         endpoints:
           host: 10.0.2.15
@@ -92,14 +96,18 @@ suites:
             phys_net: physbare
             ip: 192.168.50.1
             mask: 24
-        networks:
-          baremetal:
-            phys_net: physbare
-            network: 192.168.50.0
-            mask: 24
-            gateway: 192.168.50.1
-            allocation_start: 192.168.50.100
-            allocation_end: 192.168.50.200
+        neutron:
+          networks:
+            baremetal:
+              phys_net: physbare
+          subnets:
+            baremetal-subnet:
+              network_name: baremetal
+              network: 192.168.50.0
+              mask: 24
+              gateway: 192.168.50.1
+              allocation_start: 192.168.50.100
+              allocation_end: 192.168.50.200
       openstack:
         endpoints:
           host: 10.0.2.15

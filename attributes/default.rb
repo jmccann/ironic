@@ -1,5 +1,6 @@
 default['ironic']['bridges'] = {}
-default['ironic']['networks'] = {}
+default['ironic']['neutron']['networks'] = {}
+default['ironic']['neutron']['subnets'] = {}
 default['ironic']['gateway'] = nil
 default['ironic']['inspector']['sqlite']['path'] = '/var/lib/ironic-inspector/inspector.sqlite'
 default['ironic']['inspector']['dnsmasq_interface'] = 'br-int'

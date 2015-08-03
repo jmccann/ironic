@@ -16,18 +16,20 @@ describe 'ironic::populate_neutron' do
       node.set['ironic']['bridges']['br-gate']['ip'] = '10.0.2.15'
       node.set['ironic']['bridges']['br-gate']['mask'] = '24'
 
-      node.set['ironic']['networks']['baremetal']['phys_net'] = 'physbare'
-      node.set['ironic']['networks']['baremetal']['network'] = '192.168.50.0'
-      node.set['ironic']['networks']['baremetal']['gateway'] = '192.168.50.1'
-      node.set['ironic']['networks']['baremetal']['mask'] = '24'
-      node.set['ironic']['networks']['baremetal']['allocation_start'] = '192.168.50.100'
-      node.set['ironic']['networks']['baremetal']['allocation_end'] = '192.168.50.200'
+      node.set['ironic']['neutron']['networks']['baremetal']['phys_net'] = 'physbare'
+      node.set['ironic']['neutron']['subnets']['baremetal-subnet']['network_name'] = 'baremetal'
+      node.set['ironic']['neutron']['subnets']['baremetal-subnet']['network'] = '192.168.50.0'
+      node.set['ironic']['neutron']['subnets']['baremetal-subnet']['gateway'] = '192.168.50.1'
+      node.set['ironic']['neutron']['subnets']['baremetal-subnet']['mask'] = '24'
+      node.set['ironic']['neutron']['subnets']['baremetal-subnet']['allocation_start'] = '192.168.50.100'
+      node.set['ironic']['neutron']['subnets']['baremetal-subnet']['allocation_end'] = '192.168.50.200'
 
-      node.set['ironic']['networks']['test']['phys_net'] = 'physbare'
-      node.set['ironic']['networks']['test']['network'] = '192.168.55.0'
-      node.set['ironic']['networks']['test']['mask'] = '24'
-      node.set['ironic']['networks']['test']['allocation_start'] = '192.168.55.100'
-      node.set['ironic']['networks']['test']['allocation_end'] = '192.168.55.200'
+      node.set['ironic']['neutron']['networks']['test']['phys_net'] = 'physbare'
+      node.set['ironic']['neutron']['subnets']['testit']['network_name'] = 'test'
+      node.set['ironic']['neutron']['subnets']['testit']['network'] = '192.168.55.0'
+      node.set['ironic']['neutron']['subnets']['testit']['mask'] = '24'
+      node.set['ironic']['neutron']['subnets']['testit']['allocation_start'] = '192.168.55.100'
+      node.set['ironic']['neutron']['subnets']['testit']['allocation_end'] = '192.168.55.200'
     end.converge(described_recipe)
   end
 
@@ -50,7 +52,7 @@ describe 'ironic::populate_neutron' do
     stub_command("      export OS_USERNAME=admin\n      export OS_PASSWORD=9NDaxGTfwRpHrL7j\n      export OS_TENANT_NAME=admin\n      export OS_AUTH_URL=http://127.0.0.1:5000/v2.0\n\n      neutron net-list -F name | egrep \"\\|[ ]+baremetal[ ]+\\|\"\n").and_return(false)
     stub_command("      export OS_USERNAME=admin\n      export OS_PASSWORD=9NDaxGTfwRpHrL7j\n      export OS_TENANT_NAME=admin\n      export OS_AUTH_URL=http://127.0.0.1:5000/v2.0\n\n      neutron subnet-list -F name | egrep \"\\|[ ]+baremetal-subnet[ ]+\\|\"\n").and_return(false)
     stub_command("      export OS_USERNAME=admin\n      export OS_PASSWORD=9NDaxGTfwRpHrL7j\n      export OS_TENANT_NAME=admin\n      export OS_AUTH_URL=http://127.0.0.1:5000/v2.0\n\n      neutron net-list -F name | egrep \"\\|[ ]+test[ ]+\\|\"\n").and_return(false)
-    stub_command("      export OS_USERNAME=admin\n      export OS_PASSWORD=9NDaxGTfwRpHrL7j\n      export OS_TENANT_NAME=admin\n      export OS_AUTH_URL=http://127.0.0.1:5000/v2.0\n\n      neutron subnet-list -F name | egrep \"\\|[ ]+test-subnet[ ]+\\|\"\n").and_return(false)
+    stub_command("      export OS_USERNAME=admin\n      export OS_PASSWORD=9NDaxGTfwRpHrL7j\n      export OS_TENANT_NAME=admin\n      export OS_AUTH_URL=http://127.0.0.1:5000/v2.0\n\n      neutron subnet-list -F name | egrep \"\\|[ ]+testit[ ]+\\|\"\n").and_return(false)
   end
 
   it 'removes matching IP from interface' do
@@ -82,10 +84,10 @@ describe 'ironic::populate_neutron' do
   end
 
   it 'adds neutron subnet baremetal-subnet' do
-    expect(chef_run).to run_execute('create baremetal subnet').with(command: 'neutron subnet-create baremetal 192.168.50.0/24 --name baremetal-subnet --ip-version=4 --gateway=192.168.50.1 --allocation-pool start=192.168.50.100,end=192.168.50.200 --enable-dhcp')
+    expect(chef_run).to run_execute('create baremetal-subnet subnet').with(command: 'neutron subnet-create baremetal 192.168.50.0/24 --name baremetal-subnet --ip-version=4 --gateway=192.168.50.1 --allocation-pool start=192.168.50.100,end=192.168.50.200 --enable-dhcp')
   end
 
-  it 'adds neutron subnet test-subnet' do
-    expect(chef_run).to run_execute('create test subnet').with(command: 'neutron subnet-create test 192.168.55.0/24 --name test-subnet --ip-version=4 --gateway= --allocation-pool start=192.168.55.100,end=192.168.55.200 --enable-dhcp')
+  it 'adds neutron subnet testit' do
+    expect(chef_run).to run_execute('create testit subnet').with(command: 'neutron subnet-create test 192.168.55.0/24 --name testit --ip-version=4 --gateway= --allocation-pool start=192.168.55.100,end=192.168.55.200 --enable-dhcp')
   end
 end
