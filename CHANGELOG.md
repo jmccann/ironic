@@ -1,3 +1,7 @@
+3.1.4
+-----
+* Change default value for attr `bridges` from `[]` to `{}` to better reflect the datastructure
+
 3.1.3
 -----
 * Pin chef-vault dependency to current latest
