@@ -149,6 +149,13 @@ You can extend inspection by:
 
 By default you can only use inspector with pxe_ drivers.  However we have PoC'd adding code to agent_ drivers with agent_vbox and it seems to be working fine.  We will extend the rest of the agent_ drivers as well in the future.
 
+# Control node selection
+
+Driven by setting `capabilities` in ironic node and nova flavor.
+
+* Example at: http://docs.openstack.org/developer/ironic/deploy/install-guide.html#boot-mode-support
+* Implemented in: https://blueprints.launchpad.net/nova/+spec/pass-flavor-capabilities-to-ironic-virt-driver
+
 # Resources
 
 * http://docs.openstack.org/developer/ironic/drivers/vbox.html - Using Vbox to simulate baremetal nodes for ironic.  This assumes a base undertanding of how a lot of stuff works already.
