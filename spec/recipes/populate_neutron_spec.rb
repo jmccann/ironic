@@ -55,6 +55,11 @@ describe 'ironic::populate_neutron' do
     stub_command("      export OS_USERNAME=admin\n      export OS_PASSWORD=9NDaxGTfwRpHrL7j\n      export OS_TENANT_NAME=admin\n      export OS_AUTH_URL=http://127.0.0.1:5000/v2.0\n\n      neutron subnet-list -F name | egrep \"\\|[ ]+testit[ ]+\\|\"\n").and_return(false)
   end
 
+  it 'restarts neutron-server if ml2 config changes' do
+    resource = chef_run.template('/etc/neutron/plugins/ml2/ml2_conf.ini')
+    expect(resource).to notify('execute[restart neutron]').to(:run).immediately
+  end
+
   it 'removes matching IP from interface' do
     expect(chef_run).to run_execute('remove IP from enp0s8').with(command: 'ip addr del 192.168.50.1/24 dev enp0s8')
   end
