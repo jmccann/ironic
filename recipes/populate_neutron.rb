@@ -1,4 +1,12 @@
-class ::Chef::Recipe # rubocop:disable Documentation
+include_recipe 'openstack-network::openvswitch'
+include_recipe 'openstack-network::server'
+
+# Need to restart immediately for CLI commands to work
+r = resources('template[/etc/neutron/plugins/ml2/ml2_conf.ini]')
+r.notifies :restart, 'service[neutron-server]', :immediately
+r.notifies :restart, 'service[neutron-plugin-openvswitch-agent]', :immediately
+
+class ::Chef::Recipe # rubocop:disable all
   include ::Openstack
 end
 
@@ -67,7 +75,7 @@ node['ironic']['neutron']['networks'].each do |net, data|
   execute "create #{net} net" do
     environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
                 'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
-    command "neutron net-create #{net} --shared --provider:network_type flat --provider:physical_network #{data['phys_net']}"
+    command "neutron net-create #{net} --shared --provider:network_type flat --provider:physical_network #{net}"
     not_if <<-EOF
       export OS_USERNAME=#{admin_user}
       export OS_PASSWORD=#{admin_pass}
