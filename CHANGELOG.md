@@ -1,3 +1,8 @@
+4.0.2
+-----
+* revert: Create network using flat network name instead of bridge interface name (this was not a bug and instead introduced one)
+* bug: Change how to restart neutron services
+
 4.0.1
 -----
 * bug: mkdir path to ironic log directory
