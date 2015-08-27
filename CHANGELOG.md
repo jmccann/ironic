@@ -1,3 +1,9 @@
+4.0.1
+-----
+* bug: mkdir path to ironic log directory
+* bug: Restart neutron services on config change so new flat networks are available to populate against
+* bug: Create network using flat network name instead of bridge interface name
+
 4.0.0
 -----
 * Allow defining multiple subnets in a network
