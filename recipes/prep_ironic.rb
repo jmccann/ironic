@@ -36,3 +36,6 @@ ruby_block 'Get cleaning network id' do
 end
 
 package 'ipmitool'
+
+# Resource required for execute[ironic db sync] (didn't use to be required)
+directory '/var/log/ironic'
