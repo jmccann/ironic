@@ -1,5 +1,6 @@
 Ironic
 ======
+[![Build Status](https://travis-ci.org/jmccann/ironic.svg?branch=travis_ci)](https://travis-ci.org/jmccann/ironic)
 
 Using Stackforge to deploy a standalone Ironic environment.
 
