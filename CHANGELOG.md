@@ -1,3 +1,7 @@
+4.1.0
+-----
+* Disable node cleaning when no cleaning network is specified
+
 4.0.2
 -----
 * revert: Create network using flat network name instead of bridge interface name (this was not a bug and instead introduced one)
