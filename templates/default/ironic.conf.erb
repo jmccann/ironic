@@ -485,6 +485,11 @@ workers_pool_size=<%= node['openstack']['bare-metal']['conductor']['workers_pool
 # the check entirely. (integer value)
 #sync_local_state_interval=180
 
+<% unless node['openstack']['bare-metal']['neutron']['cleaning_network_uuid'].to_s.empty? -%>
+clean_nodes = true
+<% else -%>
+clean_nodes = false
+<% end -%>
 
 [console]
 
@@ -1029,11 +1034,10 @@ url=<%= @network_endpoint %>
 # (string value)
 #auth_strategy=keystone
 
+<% unless node['openstack']['bare-metal']['neutron']['cleaning_network_uuid'].to_s.empty? -%>
 # Network uuid to perform cleaning of node on
-<% unless node['openstack']['bare-metal']['neutron']['cleaning_network_uuid'].to_s.empty? %>
 cleaning_network_uuid = <%= node['openstack']['bare-metal']['neutron']['cleaning_network_uuid'] %>
-<% end %>
-
+<% end -%>
 
 [oslo_messaging_amqp]
 
