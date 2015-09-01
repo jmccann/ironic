@@ -58,32 +58,6 @@ See dev databags @ [test/integration/data_bags](test/integration/data_bags)
 
 When it is done you can hit the dashboard @ http://localhost:8080/ admin:password
 
-# Install VirtualBox PXE Driver
-Install VirtualBox Extension Pack for PXE Driver support from https://www.virtualbox.org/wiki/Downloads
-
-# Start VBox Webserver thing on host
-Blank out password:
-```
-VBoxManage setproperty websrvauthlibrary null
-```
-
-Start it up in foreground
-MacOSX:
-```
-/Applications/VirtualBox.app/Contents/MacOS/vboxwebsrv
-```
-
-Windows:
-```
-C:\Program Files\Oracle\VirtualBox\VBoxWebSrv.exe
-```
-
-# Create vbox baremetal node
-On Host:
-```
-./baremetal_vm.sh
-```
-
 # Run Chef
 ```
 bundle exec kitchen conv
@@ -95,7 +69,7 @@ bundle exec kitchen conv
 bexec kitchen login
 sudo su -
 . ~/openrc
-NODE_UUID=$(ironic node-list | egrep "my-baremetal"'[^-]' | awk '{ print $2 }')
+NODE_UUID=$(ironic node-list | egrep "node-1"'[^-]' | awk '{ print $2 }')
 ironic node-show $NODE_UUID
 ironic node-validate $NODE_UUID
 ```
@@ -107,14 +81,7 @@ bexec kitchen login
 sudo su -
 
 . ~/openrc
-NODE_UUID=$(ironic node-list | egrep "my-baremetal"'[^-]' | awk '{ print $2 }')
-image=$(nova image-list | egrep "cirros"'[^-]' | awk '{ print $2 }')
-net_id=$(neutron net-list | egrep "baremetal"'[^-]' | awk '{ print $2 }')
-
-ironic node-update $NODE_UUID add instance_info/image_source=$image
-ironic node-update $NODE_UUID add instance_info/root_gb=11
-
-nova boot --flavor my-baremetal-flavor --nic net-id=$net_id --image $image --key-name default testing
+nova boot --flavor my-baremetal-flavor --image $(nova image-list | egrep "cirros"'[^-]' | awk '{ print $2 }') --key-name default testing
 
 watch ironic node-list
 ```

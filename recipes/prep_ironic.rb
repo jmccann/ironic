@@ -39,3 +39,9 @@ package 'ipmitool'
 
 # Resource required for execute[ironic db sync] (didn't use to be required)
 directory '/var/log/ironic'
+
+%w(ironic-conductor.log ironic-api.log).each do |f|
+  file "/var/log/ironic/#{f}" do
+    owner 'ironic'
+  end
+end

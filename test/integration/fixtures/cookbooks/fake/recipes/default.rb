@@ -1,4 +1,4 @@
-class ::Chef::Recipe # rubocop:disable Documentation
+class ::Chef::Recipe # rubocop:disable all
   include ::Openstack
 end
 
@@ -17,6 +17,16 @@ execute 'ssh-keygen -t rsa -N "" -f /root/.ssh/id_rsa' do
   creates '/root/.ssh/id_rsa'
 end
 
+remote_file '/root/.ssh/authorized_keys' do
+  source 'file:///root/.ssh/id_rsa.pub'
+end
+
+remote_file '/tmp/ssh_key' do
+  owner 'ironic'
+  mode '0600'
+  source 'file:///root/.ssh/id_rsa'
+end
+
 execute 'nova keypair-add default --pub-key ~/.ssh/id_rsa.pub' do
   environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
               'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
@@ -27,44 +37,7 @@ execute 'nova keypair-add default --pub-key ~/.ssh/id_rsa.pub' do
   notifies :start, 'service[ironic-api]', :immediately
 end
 
-execute "ironic node-create -n my-baremetal -d agent_vbox -i virtualbox_host='10.0.2.2' -i virtualbox_vmname='baremetal'" do
-  environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
-              'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
-  retries 10
-  retry_delay 10
-  not_if 'ironic node-show my-baremetal'
-end
-
-execute 'add node metadata' do
-  environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
-              'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
-  command <<-EOF
-    NODE_UUID=$(ironic node-list | egrep "my-baremetal"'[^-]' | awk '{ print $2 }')
-    IMG_SRC=$(glance image-list | egrep -- 'cirros ' | awk '{print $2}') # For agent_vbox
-    IMG_KERN=$(glance image-list | egrep 'ir-deploy-agent.kernel ' | awk '{print $2}')
-    IMG_RAM=$(glance image-list | egrep 'ir-deploy-agent.initramfs ' | awk '{print $2}')
-
-    MAC_ADDRESS=08:00:27:6E:DF:70
-    RAM_MB=4096
-    CPU=1
-    DISK_GB=11
-    ARCH=x86_64
-
-    ironic node-update my-baremetal add \
-    properties/cpus=$CPU \
-    properties/memory_mb=$RAM_MB \
-    properties/local_gb=$DISK_GB \
-    properties/cpu_arch=$ARCH
-
-    ironic node-update my-baremetal add instance_info/root_gb=$DISK_GB
-    ironic node-update my-baremetal add instance_info/image_source=$IMG_SRC
-    ironic node-update my-baremetal add driver_info/deploy_kernel=$IMG_KERN
-    ironic node-update my-baremetal add driver_info/deploy_ramdisk=$IMG_RAM
-
-    ironic port-create -n $NODE_UUID -a $MAC_ADDRESS
-  EOF
-  not_if "ironic port-list | grep '08:00:27:6e:df:70'"
-end
+include_recipe 'fake::create_nodes'
 
 execute 'add flavor' do
   environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,

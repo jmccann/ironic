@@ -8,27 +8,7 @@ export OS_REGION_NAME=RegionOne
 export OS_VOLUME_API_VERSION=2
 
 @test 'creates network mapping between br-bare and physbare' {
-  grep "physbare:br-bare" /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini
-}
-
-@test 'bridge br-bare created' {
-  ovs-vsctl show | grep 'Bridge br-bare'
-}
-
-@test 'bridge br-bare associated with enp0s8' {
-  ovs-vsctl show | grep enp0s8
-}
-
-@test 'enp0s8 is link UP' {
-  ip link show enp0s8 | grep UP
-}
-
-@test 'Bridge br-bare has IP configured' {
-  ip addr show br-bare | grep 192.168.50.1
-}
-
-@test 'enp0s3 is link UP' {
-  ip link show enp0s3 | grep UP
+  grep "physbare:brbm" /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini
 }
 
 @test 'baremetal net created' {

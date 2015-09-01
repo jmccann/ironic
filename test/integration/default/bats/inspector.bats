@@ -9,7 +9,7 @@
 }
 
 @test 'inspector dnsmasq is configured' {
-  grep br-bare /etc/ironic-discoverd/dnsmasq.conf
+  grep brbm /etc/ironic-discoverd/dnsmasq.conf
 }
 
 @test 'inspector is running' {

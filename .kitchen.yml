@@ -7,39 +7,32 @@ provisioner:
   require_chef_omnibus: true
 
 platforms:
-  - name: centos-7.0
+  - name: centos-7.1
     driver:
       customize:
-        cpus: 2
-        memory: 6144
+        cpus: 4
+        memory: 10240
         nicpromisc2: allow-all
       network:
         - ["forwarded_port", {guest: 443, host: 9443, auto_correct: true}]
         - ["forwarded_port", {guest: 80, host: 8080, auto_correct: true}]
-        - ["private_network", {type: dhcp, auto_config: false, virtualbox__intnet: true}]
 
 suites:
   - name: default
     run_list:
-      - recipe[fake::vbox_driver_prereq]
+      - recipe[fake::network_prep]
       - recipe[ironic::default]
       - recipe[openstack-object-storage::setup] # Bug?  Should search run_list including include_recipe?
       - recipe[fake::default]
     attributes:
       ironic:
         inspector:
-          dnsmasq_interface: br-bare
+          dnsmasq_interface: brbm
           dhcp_range: 192.168.50.201,192.168.50.250
           discovery_kernel: https://www.googledrive.com/host/0B7ZaljvkcyssMGN0bmk1OV9Fdnc
           discovery_initramfs: https://www.googledrive.com/host/0B7ZaljvkcyssWlUxdHJWYWI3M2M
           gateway: 192.168.50.1
         gateway: 10.0.2.2
-        bridges:
-          br-bare:
-            interface: enp0s8
-            phys_net: physbare
-            ip: 192.168.50.1
-            mask: 24
         neutron:
           networks:
             baremetal:
@@ -53,6 +46,12 @@ suites:
               allocation_start: 192.168.50.100
               allocation_end: 192.168.50.200
       openstack:
+        network:
+          ml2:
+            flat_networks: physbare
+            network_vlan_ranges: physbare
+          openvswitch:
+            bridge_mappings: physbare:brbm
         endpoints:
           host: 10.0.2.15
           bind-host: 10.0.2.15
@@ -67,7 +66,7 @@ suites:
           api_url: http://10.0.2.15:6385
           tftp:
             server: 10.0.2.15
-          enabled_drivers: fake,pxe_ssh,pxe_ipmitool,pxe_vbox,agent_vbox,agent_ssh,agent_ipmitool
+          enabled_drivers: fake,pxe_ssh,pxe_ipmitool,agent_ssh,agent_ipmitool
           swift:
             endpoint_url: http://10.0.2.15:8080
       rabbitmq:
