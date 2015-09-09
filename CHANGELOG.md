@@ -1,3 +1,7 @@
+4.1.1
+-----
+* Speed up neutron network population
+
 4.1.0
 -----
 * Disable node cleaning when no cleaning network is specified
