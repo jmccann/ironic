@@ -29,6 +29,18 @@ service 'NetworkManager' do
   action [:disable, :stop]
 end
 
+execute 'refresh neutron net cache' do
+  environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
+              'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
+  command 'neutron net-list > /var/tmp/net.list'
+end
+
+execute 'refresh neutron subnet cache' do
+  environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
+              'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
+  command 'neutron subnet-list > /var/tmp/subnet.list'
+end
+
 node['ironic']['bridges'].each do |br, data|
   execute "Add bridge #{br}" do
     command "ovs-vsctl add-br #{br}"
@@ -80,14 +92,7 @@ node['ironic']['neutron']['networks'].each do |net, data|
     environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
                 'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
     command "neutron net-create #{net} --shared --provider:network_type flat --provider:physical_network #{data['phys_net']}"
-    not_if <<-EOF
-      export OS_USERNAME=#{admin_user}
-      export OS_PASSWORD=#{admin_pass}
-      export OS_TENANT_NAME=#{admin_tenant}
-      export OS_AUTH_URL=#{auth_uri}
-
-      neutron net-list -F name | egrep \"\\|[ ]+#{net}[ ]+\\|\"
-    EOF
+    not_if "egrep \"\\|[ ]+#{net}[ ]+\\|\" /var/tmp/net.list"
   end
 end
 
@@ -96,13 +101,6 @@ node['ironic']['neutron']['subnets'].each do |subnet, data|
     environment 'OS_USERNAME' => admin_user, 'OS_PASSWORD' => admin_pass,
                 'OS_TENANT_NAME' => admin_tenant, 'OS_AUTH_URL' => auth_uri
     command "neutron subnet-create #{data['network_name']} #{data['network']}/#{data['mask']} --name #{subnet} --ip-version=4 --gateway=#{data['gateway']} --allocation-pool start=#{data['allocation_start']},end=#{data['allocation_end']} --enable-dhcp" # rubocop:disable LineLength
-    not_if <<-EOF
-      export OS_USERNAME=#{admin_user}
-      export OS_PASSWORD=#{admin_pass}
-      export OS_TENANT_NAME=#{admin_tenant}
-      export OS_AUTH_URL=#{auth_uri}
-
-      neutron subnet-list -F name | egrep \"\\|[ ]+#{subnet}[ ]+\\|\"
-    EOF
+    not_if "egrep \"\\|[ ]+#{subnet}[ ]+\\|\" /var/tmp/subnet.list"
   end
 end

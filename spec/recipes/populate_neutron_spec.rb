@@ -49,10 +49,10 @@ describe 'ironic::populate_neutron' do
     stub_command('ip addr show br-gate | grep 10.0.2.15').and_return(false)
 
     stub_command("route -n | awk '{print $1}' | grep '0.0.0.0'").and_return(false)
-    stub_command("      export OS_USERNAME=admin\n      export OS_PASSWORD=9NDaxGTfwRpHrL7j\n      export OS_TENANT_NAME=admin\n      export OS_AUTH_URL=http://127.0.0.1:5000/v2.0\n\n      neutron net-list -F name | egrep \"\\|[ ]+baremetal[ ]+\\|\"\n").and_return(false)
-    stub_command("      export OS_USERNAME=admin\n      export OS_PASSWORD=9NDaxGTfwRpHrL7j\n      export OS_TENANT_NAME=admin\n      export OS_AUTH_URL=http://127.0.0.1:5000/v2.0\n\n      neutron subnet-list -F name | egrep \"\\|[ ]+baremetal-subnet[ ]+\\|\"\n").and_return(false)
-    stub_command("      export OS_USERNAME=admin\n      export OS_PASSWORD=9NDaxGTfwRpHrL7j\n      export OS_TENANT_NAME=admin\n      export OS_AUTH_URL=http://127.0.0.1:5000/v2.0\n\n      neutron net-list -F name | egrep \"\\|[ ]+test[ ]+\\|\"\n").and_return(false)
-    stub_command("      export OS_USERNAME=admin\n      export OS_PASSWORD=9NDaxGTfwRpHrL7j\n      export OS_TENANT_NAME=admin\n      export OS_AUTH_URL=http://127.0.0.1:5000/v2.0\n\n      neutron subnet-list -F name | egrep \"\\|[ ]+testit[ ]+\\|\"\n").and_return(false)
+    stub_command("egrep \"\\|[ ]+baremetal[ ]+\\|\" /var/tmp/net.list").and_return(false)
+    stub_command("egrep \"\\|[ ]+baremetal-subnet[ ]+\\|\" /var/tmp/subnet.list").and_return(false)
+    stub_command("egrep \"\\|[ ]+test[ ]+\\|\" /var/tmp/net.list").and_return(false)
+    stub_command("egrep \"\\|[ ]+testit[ ]+\\|\" /var/tmp/subnet.list").and_return(false)
   end
 
   it 'restarts neutron-server if ml2 config changes' do
