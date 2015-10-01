@@ -1,3 +1,8 @@
+4.2.0
+-----
+* Allow setting Ironic deploy timeout callback
+* bug: Pin to chef-vault 1.3.0 cookbook ... major changes with minor version bump sucks
+
 4.1.1
 -----
 * Speed up neutron network population
