@@ -8,7 +8,7 @@ version          '4.1.1'
 
 depends 'yum'
 depends 'tftp'
-depends 'chef-vault', '~> 1.3.0'
+depends 'chef-vault', '1.3.0'
 depends 'openstack-common'
 depends 'openstack-ops-database'
 depends 'openstack-ops-messaging'
