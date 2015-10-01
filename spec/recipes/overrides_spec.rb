@@ -21,12 +21,16 @@ describe 'ironic::overrides' do
     cached(:chef_run) do
       ChefSpec::ServerRunner.new(platform: 'redhat', version: '6.5') do |node, _server|
         node.set['openstack']['bare-metal']['neutron']['cleaning_network_uuid'] = 'asdf'
+        node.set['openstack']['bare-metal']['deploy_callback_timeout'] = '600'
       end.converge(described_recipe)
     end
 
     it 'enables node cleaning when cleaning network specified' do
       expect(chef_run).to render_file('/etc/ironic/ironic.conf').with_content('clean_nodes = true')
-      expect(chef_run).to render_file('/etc/ironic/ironic.conf').with_content('cleaning_network_uuid = asdf')
+    end
+
+    it 'overrides deploy_callback_timeout value' do
+      expect(chef_run).to render_file('/etc/ironic/ironic.conf').with_content('deploy_callback_timeout = 600')
     end
   end
 end

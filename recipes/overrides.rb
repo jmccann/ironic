@@ -29,7 +29,7 @@ identity_uri = identity_uri_transform(identity_admin_endpoint)
 network_endpoint = internal_endpoint 'network-api' || {}
 api_bind = internal_endpoint 'bare-metal-api-bind'
 
-# Contribute attributizing: enabled-drivers, swift
+# Contribute attributizing: enabled-drivers, swift, node['openstack']['bare-metal']['deploy_callback_timeout']
 r = resources('template[/etc/ironic/ironic.conf]')
 r.cookbook 'ironic'
 r.variables api_bind_address: api_bind.host,

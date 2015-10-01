@@ -438,6 +438,9 @@ api_url = <%= node['openstack']['bare-metal']['api_url'].to_s %>
 # Timeout (seconds) for waiting callback from deploy ramdisk.
 # 0 - unlimited. (integer value)
 #deploy_callback_timeout=1800
+<% unless node['openstack']['bare-metal']['deploy_callback_timeout'].to_s.empty? %>
+deploy_callback_timeout = <%= node['openstack']['bare-metal']['deploy_callback_timeout'].to_s %>
+<% end %>
 
 # During sync_power_state, should the hardware power state be
 # set to the state recorded in the database (True) or should
