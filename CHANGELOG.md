@@ -1,3 +1,7 @@
+4.2.1
+-----
+* bug: Was trying to load chef-vault before it was installed
+
 4.2.0
 -----
 * Allow setting Ironic deploy timeout callback
