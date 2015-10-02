@@ -1,5 +1,3 @@
-require 'chef-vault'
-
 module ::Openstack
   # Contribute back to openstack-common
 
