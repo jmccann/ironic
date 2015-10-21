@@ -11,6 +11,7 @@ default['ironic']['inspector']['discovery_kernel'] = nil
 default['ironic']['inspector']['discovery_initramfs'] = nil
 
 default['openstack']['yum']['uri'] = 'http://repos.fedorapeople.org/repos/openstack/openstack-kilo/el7'
+default['openstack']['yum']['repo-key'] = 'https://raw.githubusercontent.com/redhat-openstack/rdo-release/kilo/RPM-GPG-KEY-RDO-kilo'
 default['openstack']['databag_type'] = 'vault'
 default['openstack']['db']['service_type'] = 'mysql'
 
