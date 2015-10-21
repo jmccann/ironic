@@ -135,3 +135,12 @@ Driven by setting `capabilities` in ironic node and nova flavor.
 * http://docs.openstack.org/image-guide/content/ch_modifying_images.html - How to edit images
 * https://developer.rackspace.com/blog/how-we-run-ironic-and-you-can-too/ - Great writeup on how rackspace is using ironic
 * https://github.com/rackerlabs/ironic-neutron-plugin - ironic/neutron plugin for managing cisco nexus hardware???
+
+# Testing
+This cookbook leverages ChefDK 0.9.0.  There are some additional gems that need to be installed as well for rspec testing.
+
+RSpec:
+```
+bundle install
+bundle exec rspec
+```

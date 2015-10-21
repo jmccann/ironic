@@ -109,6 +109,9 @@ database = <%= node['ironic']['inspector']['sqlite']['path'] %>
 # NIC data was provided by the ramdisk.Do not exclude these two unless
 # you really know what you're doing. (string value)
 #processing_hooks = ramdisk_error,scheduler,validate_interfaces
+<% unless node['ironic']['inspector']['processing_hooks'].nil? -%>
+processing_hooks = <%= node['ironic']['inspector']['processing_hooks'] %>
+<% end -%>
 
 # Debug mode enabled/disabled. (boolean value)
 #debug = false

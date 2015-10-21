@@ -40,6 +40,10 @@ describe 'ironic::inspector' do
       expect(chef_run).to render_file('/etc/ironic-discoverd/dnsmasq.conf').with_content(File.read 'spec/recipes/fixtures/templates/dnsmasq.conf.default')
     end
 
+    it 'uses default processing hooks' do
+      expect(chef_run).not_to render_file('/etc/ironic-discoverd/discoverd.conf').with_content(/^processing_hooks = /)
+    end
+
     it 'starts and enables ironic-inspector services' do
       expect(chef_run).to start_service 'openstack-ironic-discoverd'
       expect(chef_run).to enable_service 'openstack-ironic-discoverd'
@@ -57,6 +61,7 @@ describe 'ironic::inspector' do
         node.set['ironic']['inspector']['dhcp_range'] = '192.168.50.201,192.168.50.250'
         node.set['ironic']['inspector']['gateway'] = '192.168.50.1'
         node.set['openstack']['bare-metal']['tftp']['server'] = '10.0.2.15'
+        node.set['ironic']['inspector']['processing_hooks'] = 'ramdisk_error,scheduler,validate_interfaces,extras'
       end.converge(described_recipe)
     end
 
@@ -66,6 +71,10 @@ describe 'ironic::inspector' do
 
       # From ironic::tftp
       stub_command('[ -e /var/lib/tftpboot/var/lib/tftpboot ]').and_return(true)
+    end
+
+    it 'uses specified processing hooks' do
+      expect(chef_run).to render_file('/etc/ironic-discoverd/discoverd.conf').with_content('processing_hooks = ramdisk_error,scheduler,validate_interfaces,extras')
     end
 
     it 'creates default pxelinux.cfg file' do
