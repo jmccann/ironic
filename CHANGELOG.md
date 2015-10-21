@@ -1,3 +1,8 @@
+4.3.0
+-----
+* Ability to manage processing_hooks in discoverd.conf file
+* Ability to manage discovery ramdisk after creation if checksums are provided
+
 4.2.1
 -----
 * bug: Was trying to load chef-vault before it was installed
