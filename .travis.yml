@@ -6,13 +6,13 @@ addons:
     packages:
       - chefdk
 
-install: echo "skip bundle install"
-
 # Ensure we make ChefDK's Ruby the default
-before_script:
+install:
   - eval "$(/opt/chefdk/bin/chef shell-init bash)"
   # We have to install chef-sugar for ChefSpec
   - /opt/chefdk/embedded/bin/chef gem install chef-sugar
+  # Required for chef-vault-testfixtures for ChefSpec testing
+  - bundle install --retry=3
 
 script:
   - bundle exec rspec --color --format progress
